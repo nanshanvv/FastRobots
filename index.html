@@ -17,6 +17,18 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <!-- code highlight -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+
+
+
+
+
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -106,10 +118,10 @@
                 <div class="row g-0">
                     <div class="col-lg-4 col-sm-6">
                         <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab1Modal">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic1.png" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">LAB 1</div>
+                                <div class="project-name">The Artemis board and Bluetooth</div>
                             </div>
                         </a>
                     </div>
@@ -227,32 +239,803 @@
 
                 <!-- Here is the code for report -->
         <div class="modal fade" id="lab1Modal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
 
-                        <!-- Modal 头部 -->
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="lab1ModalLabel">Lab 1 Report</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
+                    <!-- Modal 头部 -->
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab1ModalLabel">Lab 1 Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
 
-                        <!-- Modal 主体（长报告示例） -->
-                        <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+                    <!-- Modal 主体：通过 p-4 增加内边距，max-height: 80vh 和 overflow-y: auto 用于可滚动 -->
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+
+                        <!-- 可以在内部再包一层容器，便于统一排版 -->
+                        <div class="container-fluid">
 
                             <!-- 第一节：简介 -->
-                            <h2>This is just a example page, I will upload the lab1 report ASAP</h2>
+                            <h2 class="text-center mb-4">Lab 1: The Artemis board and Bluetooth</h2>
+                            <p class="text-justify">
+                                The main goal of LAB 1 is to set up and familiarize myself with the Arduino IDE and the Artemis development board.
+                            </p>
+                            <p class="text-justify">
+                                In <strong>Lab 1A</strong>, I programmed the development board, experimented with controlling the onboard LED, read and wrote serial messages via USB, and utilized the onboard temperature sensor and pulse density microphone. Additionally, I completed the additional tasks for 5000-level students.
+                            </p>
+                            <p class="text-justify">
+                                In <strong>Lab 1B</strong>, I built communication between the computer and the Artemis board via Bluetooth.
+                                Also, I implemented the ECHO command, SEND_THREE_FLOATS command, GET_TIME_MILLIS command, and a total of eight tasks. Additionally, I analyzed the communication performance.
+                            </p>
+                            <!-- 图片示例区域 -->
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/ArtemisNano.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/USB.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                
+                                </div>
+                                
+                                <!-- 图片下方的文字说明 -->
+                                <p class="text-center mt-3">
+                                Parts Required: 1 x SparkFun RedBoard Artemis Nano and 1 x USB cable
+                                </p>
+                            </div>
+                            
+
+                            <hr class="my-4"/><!-- 分割线 -->
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Lab 1A part</h2>
+                            <h4 class="text-center mb-4">Prelab</h4>
+                            <p class="text-justify">
+                                In the prelab, I downloaded and installed the latest Arduino IDE. 
+                                I also added the 
+                                <a href="https://learn.sparkfun.com/tutorials/artemis-development-with-the-arduino-ide/setting-up-the-arduino-ide" target="_blank">
+                                    JSON link
+                                </a> 
+                                to the Arduino settings (as shown in the image below).
+                            </p>
+                            <!-- 图片区容器 -->                       
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-12">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab1/lab1a/prelab.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">Task1</h4>
                             <p>
-                                这里是 Lab 1 的完整报告内容示例。你可以在此使用任何 HTML 标签来编排报告，如标题、段落、表格、图像、视频等。为了让示例更贴近实际，这里将放置较为详细的文字描述。
+
+                                In Task 1, I connected the Artemis development board to my computer and selected the correct board and port in the Arduino IDE.
+
                             </p>
                             <p>
-                                本实验的主要目标是：<strong>掌握传感器读数、控制系统基本配置</strong>，以及了解在高速情况下如何确保控制稳定性。以下章节将从硬件配置、软件流程、实验过程与结果分析等方面进行详细阐述。
+                                However, I found that two ports with the name RedBoard Artemis Nano appeared. To enable data transmission via USB, we need to select the first port (/dev/cu.usbserial-120).
+                            </p>
+                            </p>
+                            
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                  <!-- 在中等及以上屏幕占 8/12，居中显示 -->
+                                  <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab1/lab1a/port.png" 
+                                           class="img-fluid rounded" 
+                                           style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>                              
+                            
+                            
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">Task2: Testing Blink</h4>
+                            <p>
+
+                                In Task 2, I uploaded the 01.Basics code to my Artemis board and ran it. The process completed without any errors, and the blue LED on the Artemis started blinking, indicating that the board model and port I selected in the prelab were correct.
+
+                            </p>
+                            <p>
+                                Then, I changed the delay in the code from 1000 to 500, uploaded it again, and observed that the blue LED on the Artemis blinked faster.
+                            </p>
+                            <div class="ratio ratio-16x9 mb-3">
+                                <iframe
+                                  src="https://www.youtube.com/embed/uAaCQfrzwYk"
+                                  title="YouTube video"
+                                  allowfullscreen>
+                                </iframe>
+                              </div>
+                              
+                              
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">Task3: Testing Example4_Serial</h4>
+                            <p>
+                                In Task 3, I uploaded and ran the Example4_Serial code on my Artemis board. The process completed without any errors. However, when I checked the serial monitor, I noticed <strong>garbled text</strong>.
+                            </p>                            
+                            
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                  <div class="col-md-12">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab1/lab1a/T3.png" 
+                                           class="img-fluid rounded" 
+                                           style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>    
+                            
+                            <p>
+                                I realized that the <strong>baud rate</strong> in Example4_Serial was set to <strong>9600</strong>, while the serial monitor was set to <strong>38400</strong>, causing a mismatch—essentially, "the Artemis was speaking a language my computer couldn't understand." After setting both baud rates to the same value, everything worked correctly.
+                            </p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                  <div class="col-md-12">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab1/lab1a/T3success.png" 
+                                           class="img-fluid rounded" 
+                                           style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>    
+    
+
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">Task4: Testing temperature sensor</h4>
+                            <p>
+                                In Task 4, I uploaded the Example2_analogRead code to the Artemis board. I tried blowing air onto the Artemis, and I observed that the temperature values in the output increased accordingly.
+                            </p>                            
+                            <p>
+                                I also try to use <strong>getTempDegF() Function</strong> to get the die temperature in deg F. Below is a screenshot of the serial monitor output while running the code.
+                            </p>
+                            
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                  <div class="col-md-12">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab1/lab1a/T4.png" 
+                                           class="img-fluid rounded" 
+                                           style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div> 
+                            
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">Task5: Testing microphone</h4>
+                            <p>
+                                In Task 5, I tested the microphone on the Artemis board using the Example1_MicrophoneOutput code.
+                            </p>
+                            
+                            <div class="ratio ratio-16x9 mb-3">
+                                <iframe
+                                  src="https://www.youtube.com/embed/MoO7SMZ1o8g"
+                                  title="YouTube video"
+                                  allowfullscreen>
+                                </iframe>
+                              </div>
+                              
+                              
+                              <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                              <h4 class="text-center mb-4">5000-level Additional tasks: play a musical “C” and blink the light </h4>
+                              <p>
+                                In the additional task, my main goal was to make the blue LED on the Artemis light up when musical C is played and turn off when the sound stops.
+                              </p>
+                              
+                              <p>
+                                After multiple tests, I found that the frequency of musical C was 526 Hz. So, I modified the Example1_MicrophoneOutput file by adding the following code and uploaded it to the Artemis.
+                              </p>
+                              
+                              <pre><code class="language-c">
+ui32LoudestFrequency = (sampleFreq * ui32MaxIndex) / pdmDataBufferSize;
+if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
+{
+    digitalWrite(LED_BUILTIN, HIGH);  // turn the LED on (HIGH is the voltage level)
+    Serial.println("turn the light on");
+}else{
+    digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
+    Serial.println("turn the light off");
+}
+                                </code></pre>
+                                <p>
+                                    To avoid interference from background noise, I set the LED to turn on only when the detected frequency was within the 524–527 Hz range. Finally, I successfully achieved my task objective.
+                                </p>
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                      src="https://www.youtube.com/embed/3HO8Dtj66tU"
+                                      title="YouTube video"
+                                      allowfullscreen>
+                                    </iframe>
+                                  </div>
+                                
+                            <hr class="my-4"/>
+
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Lab 1B part</h2>
+                            <h4 class="text-center mb-4">Prelab and Computer Setup</h4>
+                            <p class="text-justify">
+                                Before starting the tasks in Lab 1B, I needed to download Python, create a virtual environment, and activate it.
+                            </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/setup1.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/setup2.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+
+                            <p>
+                                The next and most important step was properly configuring BLE (Bluetooth Low Energy) communication to ensure a stable connection between my computer and the Artemis development board.
+                            </p>
+                            <p>
+                                To achieve this, I needed to change the Artemis's MAC address and generate a new UUID.
+                                
+                                The purpose of this step was to ensure that my Artemis board had a unique BLE identifier (determined by its MAC address and UUID) and to prevent accidental BLE connections to the wrong device.
+                            </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/MAC.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/UUID.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                
+                                </div>
+                                
+                                <!-- 图片下方的文字说明 -->
+                                <p class="text-center mt-3">
+                                These two screenshots show the files that I change the MAC and UUID of my Artemis.
+                                </p>
+                            </div>
+
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">Task1: ECHO Command</h4>
+                            <p>
+
+                                In Task 1, I implemented the ECHO command, which sends a string from the computer to the Artemis board and then receives the same string back.
+                            </p>
+                            <p>
+                                Inspired by the <strong>PING command</strong>, my strategy was to first store the received string 
+                                in an array using <strong><em>tx_estring_value.append</em></strong>, 
+                                and then send it back to the computer using 
+                                <strong><em>tx_characteristic_string.writeValue</em></strong>.
+                            </p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                  <!-- 在中等及以上屏幕占 8/12，居中显示 -->
+                                  <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab1/lab1b/T1A.png" 
+                                           class="img-fluid rounded" 
+                                           style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                                <p class="text-center mt-3">
+                                    the Artemis-side code for Task 1 (ECHO command)
+                                    </p>
+                              </div>     
+
+                              <p>
+                                From the two screenshots below, we can see that my computer successfully received the message <strong><em>"Robot says -> Hihello:)"</em></strong>.
+
+                                Additionally, the expected prompt was correctly printed on the serial monitor of the Artemis board.
+                              </p>
+
+                              <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/T1AR.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/T1JR.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                </div>
+                                </div>
+
+
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task2: SEND_THREE_FLOATS</h4>
+                                <p>
+                                    The main goal of Task 3 was to implement the SEND_THREE_FLOATS command, which sends three floating-point numbers to the Artemis board and prints them on the Artemis side.
+                                </p>
+                                <p>
+                                    After completing the ECHO command, this task was relatively straightforward. My approach was to call <strong><em>robot_cmd.get_next_value()</em></strong> three times to retrieve the three floating-point numbers sent from the PC and then print them using <strong><em>Serial.print()</em></strong>.
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                    
+                                    <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T2ACR.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 400px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T2JR.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task3: GET_TIME_MILLIS</h4>
+                                <p>
+                                    In Task 3, the main goal was to add the GET_TIME_MILLIS command, which makes the robot respond with a string containing the current time in milliseconds and write it to the string characteristic.
+                                    This task was very similar to the <strong><em>PONG command</em></strong> and was primarily designed to help us get familiar with the <strong><em>millis() function.</em></strong>  
+                                </p>
+                                <p>
+                                    One small issue I encountered was forgetting to perform explicit type conversion. The function tx_estring_value.append only accepts int, float, double, or string, but millis() returns an unsigned long int. As a result, directly uploading the code caused the following error.
+                                </p>
+                                <div class="container my-4">
+                                    <div class="row g-4 justify-content-center">
+                                      <!-- 在中等及以上屏幕占 8/12，居中显示 -->
+                                      <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab1/lab1b/T3E.png" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>   
+                                <p>
+                                    The issue was resolved by explicitly casting millis() to an int before appending it to tx_estring_value.
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                    
+                                    <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T3AR.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 400px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T3JR.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task4: Notification Handler</h4>
+                                <p>
+                                    The main task in Task 4 was to write a notification handler in Python to receive the string value from the Artemis board and extract the timestamp from the received content.
+                                    This task helped me become familiar with <strong><em>ble.bytearray_to_string()</em></strong>  and deepened my understanding of <strong>UUIDs and how data is stored and transmitted between the PC and Artemis</strong>.
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                    
+                                    <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T4AR.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 400px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T4JR.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task5: Loop and transfer rate</h4>
+                                <p>
+                                    In Task 5, I wrote a loop to continuously obtain the current time in milliseconds and send it to the computer.
+
+                                    As shown in the results below, 68 timestamps were sent to the PC in 2 seconds, meaning the transmission speed was 34 timestamps per second.
+
+                                    Since each timestamp contains 7 bytes, the data transfer rate was approximately <strong>238 bytes per second.</strong> 
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                                            <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T5JR1.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 400px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T5JR2.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="container my-4">
+                                    <div class="row g-4 justify-content-center">
+                                      <!-- 在中等及以上屏幕占 8/12，居中显示 -->
+                                      <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab1/lab1b/T5AR.png" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>  
+                            
+
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task6: Store Time Stamps Array</h4>
+                                <p>
+                                    In Task 6, I defined a constant <strong><em>array_size</em></strong> with a value of 100 to set the size of an array for storing timestamps.
+
+                                    I then sent the entire array back to the computer and printed the timestamps in Jupyter Notebook to verify that they were indeed stored in the array.
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                                            <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T6JR.png"
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 400px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T6AR.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+
+
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task7: GET_TEMP_READINGS command</h4>
+                                <p>
+                                   
+                                    Task 7 was very similar to Task 6.
+
+                                    I added another array of the same size to store temperature readings. Using the GET_TEMP_READINGS command, I stored both timestamps and temperature values.
+
+                                    Finally, I sent both arrays back to the computer and paired each temperature reading with its corresponding timestamp.
+                                </p>
+
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                                            <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T7JR1.png"
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 400px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab1/lab1b/T7JR2.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="container my-4">
+                                    <div class="row g-4 justify-content-center">
+                                      <!-- 在中等及以上屏幕占 8/12，居中显示 -->
+                                      <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab1/lab1b/T7AR.png" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>  
+
+
+                                <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                                <h4 class="text-center mb-4">Task8: Discussion</h4>
+                            <p>
+                                In the tasks above, we have two approaches:
+                            </p>
+                            
+                            <ul>
+                               <li>Real-time transmission of timestamps</li> 
+                               <li>Batch storage + transmission</li> 
+                            </ul>
+                            <p>
+                                Method 1 Real-time Transmission of Timestamps:
+                                    This method is suitable for applications that require low latency, such as real-time monitoring. The advantage is that data is immediately transmitted to the computer, but it may be limited by BLE transmission speed. Frequent transmission of small data packets can lead to packet loss or higher power consumption.
+                            </p>
+                            <p>
+                                Method 2 Batch Storage + Transmission:
+                                    This method is better suited for large-scale data collection, such as experimental data recording. It first stores data in memory and then transmits it all at once, which improves transmission efficiency and reduces BLE connection overhead. However, its disadvantages include increased storage management complexity and the inability to access data in real time.  
+                            </p>
+                                <p>
+                                    Data Recording Speed Comparison
+                                    With an ideal BLE transmission speed of approximately 1 Mbps, Method 2 can record timestamps and temperature readings at a maximum rate of about 7,812 data points per second.
+                                    
+                                    If storing data in Artemis's RAM, which has only 384 KB, and assuming 16 bytes per data point, it can store approximately 24,576 data points before requiring transmission.
+                                </p>
+
+
+                            <hr style="border: none; border-top: 2px dashed #666; margin: 2rem 0;" />
+                            <h4 class="text-center mb-4">5000 Level Additional Task</h4>
+                            <h5>Effective Data Rate And Overhead:</h5>
+                            <p>
+                                In this task, I implemented the <strong><em>Effective_Data_Rate function</em></strong> to measure the Round-Trip Time (RTT) for different message sizes.
+                            </p>
+                            <p>
+                              The results are as follows:  
+                            </p>    
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                                        <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/ATA.png"
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 400px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/ATJ.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                  <!-- 在中等及以上屏幕占 8/12，居中显示 -->
+                                  <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab1/lab1b/output.png" 
+                                           class="img-fluid rounded" 
+                                           style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>  
+                            
+                            <p>
+                                We can see that message size and RTT have a proportional relationship—as the message size increases, it takes more time to send the data back to the PC. This indicates that larger message sizes result in slower transmission speeds.
                             </p>
 
-                            <!-- 嵌入示例图片 -->
-                            <img src="assets/img/lab1_demo.jpg" alt="Lab1 Demo" class="img-fluid mb-3" />
+                            <h5>Reliability: </h5>
                             <p>
-                                上图展示了实验平台的初步搭建情况。可以看到核心处理器、动力驱动以及基本传感器都已安装完毕。
+                                During the reliability stress test, when I set the message size to 480, I was unable to obtain an RTT, and the connection to Artemis was forcibly disconnected.
+                                This indicates that if data is sent too quickly, it may overflow, causing some data to be dropped.
                             </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                                        <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/ATA2.png"
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 400px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab1/lab1b/ATJ2.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            
+                            <h2 class="text-center mb-4">Conclusion:</h2>
+                            <p class="text-justify">
+                                Through Lab 1, I bknow how to establish communication between the PC and the Artemis board.
+                            </p>
+                            <p>
+                                Additionally, I learned how UUIDs and MAC addresses ensure the uniqueness of the Artemis board.
+                            </p>
+                            <p>
+                                Most importantly, I gained insights into how data transmission size and speed affect response time, which will help me approach data transmission challenges more effectively in the future.
+                            </p>
+
+                        </div><!-- /container-fluid -->
+                    </div><!-- /modal-body -->
+
+                    <!-- Modal 底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+
+                </div><!-- /modal-content -->
+            </div><!-- /modal-dialog -->
+        </div>
+
+
+        <!-- 使用Bootstrap 5.x为例 -->
+        <div class="modal fade" id="lab2Modal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                    <!-- Modal 头部 -->
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab1ModalLabel">Lab 1 Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Modal 主体：通过 p-4 增加内边距，max-height: 80vh 和 overflow-y: auto 用于可滚动 -->
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+
+                        <!-- 可以在内部再包一层容器，便于统一排版 -->
+                        <div class="container-fluid">
+
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Lab 1A: The Artemis board and Bluetooth</h2>
+                            <p class="text-justify">
+                                The main goal of LAB 1A is to set up and familiarize myself with the Arduino IDE and the Artemis development board.
+                            </p>
+                            <p class="text-justify">
+                                In <strong>Lab 1A</strong>, I programmed the development board, experimented with controlling the onboard LED, read and wrote serial messages via USB, and utilized the onboard temperature sensor and pulse density microphone. Additionally, I completed the additional tasks for 5000-level students.
+                            </p>
+
+                            <!-- 图片示例区域 -->
+                            <div class="my-4 p-3 border rounded bg-light">
+                                <div class="row g-3 justify-content-center">
+                                    <div class="col-md-4">
+                                        <img src="assets/img/lab1/ArtemisNano.png"
+                                            alt="Artemis Nano" 
+                                            class="img-fluid mb-3 rounded shadow"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="assets/img/lab1/USB.png" 
+                                            alt="USB" 
+                                            class="img-fluid mb-3 rounded shadow"/>
+                                    </div>
+                                </div>
+                                <p class="text-center mb-0">
+                                    上图展示了实验平台的初步搭建情况。可以看到核心处理器、动力驱动以及基本传感器都已安装完毕。
+                                </p>
+                            </div>
+
+                            <hr class="my-4"/><!-- 分割线 -->
 
                             <!-- 第二节：硬件介绍 -->
                             <h2>2. 硬件系统 (Hardware Overview)</h2>
@@ -271,49 +1054,55 @@
                             </p>
 
                             <!-- 表格示例 -->
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>硬件名称</th>
-                                        <th>型号</th>
-                                        <th>主要参数</th>
-                                        <th>备注</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>MCU</td>
-                                        <td>STM32F407</td>
-                                        <td>168 MHz CPU, 1 MB Flash, 192 KB SRAM</td>
-                                        <td>主控核心</td>
-                                    </tr>
-                                    <tr>
-                                        <td>IMU</td>
-                                        <td>MPU-6050</td>
-                                        <td>3轴加速度计 + 3轴陀螺仪</td>
-                                        <td>I2C 接口</td>
-                                    </tr>
-                                    <tr>
-                                        <td>电机</td>
-                                        <td>BLDC-2205</td>
-                                        <td>KV = 2300, 3 相无刷</td>
-                                        <td>驱动轮</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-bordered align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>硬件名称</th>
+                                            <th>型号</th>
+                                            <th>主要参数</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>MCU</td>
+                                            <td>STM32F407</td>
+                                            <td>168 MHz CPU, 1 MB Flash, 192 KB SRAM</td>
+                                            <td>主控核心</td>
+                                        </tr>
+                                        <tr>
+                                            <td>IMU</td>
+                                            <td>MPU-6050</td>
+                                            <td>3轴加速度计 + 3轴陀螺仪</td>
+                                            <td>I2C 接口</td>
+                                        </tr>
+                                        <tr>
+                                            <td>电机</td>
+                                            <td>BLDC-2205</td>
+                                            <td>KV = 2300, 3 相无刷</td>
+                                            <td>驱动轮</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr class="my-4"/><!-- 分割线 -->
 
                             <!-- 第三节：软件流程 (Software Flow) -->
                             <h2>3. 软件流程 (Software Flow)</h2>
                             <p>
                                 控制流程可以分为初始化、传感器读取、控制算法和输出执行四部分。下图是流程图示意：
                             </p>
-                            <img src="assets/img/software_flow.png" alt="Software Flow Diagram" class="img-fluid mb-3" />
+                            <img src="assets/img/software_flow.png" alt="Software Flow Diagram" class="img-fluid d-block mx-auto mb-3"/>
                             <p>
                                 - 初始化：设置串口、I2C、PWM 等外设  
                                 - 读取传感器：定时查询 IMU 和距离传感器  
                                 - 控制算法：根据期望速度或姿态，计算电机输出  
                                 - 输出执行：通过 PWM 信号给电机驱动器
                             </p>
+
+                            <hr class="my-4"/><!-- 分割线 -->
 
                             <!-- 第四节：实验过程与视频演示 -->
                             <h2>4. 实验过程与视频演示</h2>
@@ -343,7 +1132,6 @@
                                 </iframe>
                             </div>
 
-                            <!-- 继续更多文本... (模拟篇幅很长的报告) -->
                             <p>
                                 我们在测试过程中发现，当速度超过一定阈值时，传感器读数与控制输出之间的时延开始对系统稳定性产生显著影响，具体表现为车身抖动和轨迹偏移。通过在中断中优先处理 IMU 数据，并适当增大控制循环频率，可以在一定程度上减轻此影响。
                             </p>
@@ -351,7 +1139,9 @@
                                 <strong>安全注意事项：</strong> 在高速测试时，必须保证周围无障碍物或其他人员干扰，并且为车辆加装保护框，防止意外碰撞。
                             </p>
 
-                            <!-- 小结/结果分析 -->
+                            <hr class="my-4"/><!-- 分割线 -->
+
+                            <!-- 第五节：结果分析 (Results & Analysis) -->
                             <h2>5. 结果分析 (Results & Analysis)</h2>
                             <p>
                                 从实验结果来看，系统在高速下依然可以保持较好的姿态控制，但精确的速度控制会受到传感器噪声和环境因素影响。下面列出一些关键指标：
@@ -362,6 +1152,8 @@
                                 <li>控制延迟：平均 5 ms</li>
                                 <li>IMU 测量频率：200 Hz</li>
                             </ul>
+
+                            <hr class="my-4"/><!-- 分割线 -->
 
                             <!-- 第六节：结论与未来工作 -->
                             <h2>6. 结论 (Conclusion & Future Work)</h2>
@@ -382,24 +1174,28 @@
                                 <li>在真实复杂场景下进行更广泛的速度与环境测试。</li>
                             </ul>
 
-                            <!-- 更多补充说明或参考文献 -->
+                            <hr class="my-4"/><!-- 分割线 -->
+
+                            <!-- 第七节：参考文献 -->
                             <h2>7. 参考文献 (References)</h2>
                             <p>
                                 [1] Fast Robots Course Material, Cornell University (2025) <br/>
                                 [2] 《现代控制理论与应用》, 某某出版社, 2022 <br/>
                                 [3] <a href="https://github.com/xyz/fast-robot-resources" target="_blank">GitHub: fast-robot-resources</a>
                             </p>
+                            
+                        </div><!-- /container-fluid -->
+                    </div><!-- /modal-body -->
 
-                        </div><!-- /modal-body -->
-
-                        <!-- Modal 底部 -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
-                        </div>
-
+                    <!-- Modal 底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
                     </div>
-                </div>
-        </div>
+
+                </div><!-- /modal-content -->
+            </div><!-- /modal-dialog -->
+        </div><!-- /modal -->
+
 
   
         </section>
@@ -411,7 +1207,10 @@
                 <a href="https://startbootstrap.com/theme/creative" target="_blank">Start Bootstrap - Creative</a>
               </small>
             </div>
-          </footer>          
+          </footer>     
+          
+
+          
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- SimpleLightbox plugin JS-->
@@ -423,5 +1222,6 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
     </body>
 </html>
