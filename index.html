@@ -125,11 +125,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="assets/img/portfolio/fullsize/2.jpg" title="Project Name">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/2.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab2Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic2.jpg" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">LAB 2</div>
+                                <div class="project-name">IMU</div>
                             </div>
                         </a>
                     </div>
@@ -987,6 +987,526 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                 </div><!-- /modal-content -->
             </div><!-- /modal-dialog -->
         </div>
+
+        
+        <div class="modal fade" id="lab2Modal" tabindex="-1" aria-labelledby="lab2ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                    <!-- Modal 头部 -->
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab1ModalLabel">Lab 2 Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Modal 主体：通过 p-4 增加内边距，max-height: 80vh 和 overflow-y: auto 用于可滚动 -->
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+
+                        <!-- 可以在内部再包一层容器，便于统一排版 -->
+                        <div class="container-fluid">
+
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Lab 2: IMU</h2>
+                            <p class="text-justify">
+                                The purpose of this Lab is to familiarize with the calculation and transmission of IMU-related data, specifically obtaining IMU data to compute roll, pitch, and yaw and transmitting it to a computer. Additionally, it aims to understand how to reduce noise interference in the final output.
+                            </p>
+
+                            
+                            <hr class="my-4"/><!-- 分割线 -->
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Setup the IMU</h2>
+                            <p class="text-justify">
+                            First, the Artemis board and IMU need to be properly connected, as shown in the diagram below.
+                            </p>
+                            <!-- 图片区容器 -->                       
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab2/Artemis_IMU.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>
+                                Next, I installed the <strong>"SparkFun 9DOF IMU Breakout - ICM 20948 Arduino Library"</strong>  from the Arduino Library Manager and connected the IMU to the Artemis board using the QWIIC connector.
+                            </p>
+                            <p>
+                                To verify if the IMU is working properly, I ran the example program located at: <em>..\Arduino\libraries\SparkFun_ICM-20948\SparkFun_ICM-20948_ArduinoLibrary-master\examples\Arduino\Example1_Basics.</em> 
+                            </p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                  <iframe
+                                    src="https://www.youtube.com/embed/hFzSHC5e2-M"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                  </iframe>
+                                </div>
+                              </div>
+                            
+                            <p>
+                                Also, I added code shown below so that the LED would blink three times slowly on start-up.
+                            </p>
+
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab2/Blink.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                              
+                            <dt><em>Q: What does AD0_VAL represent, and should it be 0 or 1?</em></dt>
+                            <dd>A: AD0_VAL is a configuration setting used to define the I²C address of the ICM-20948 IMU sensor. When I attempted to change AD0_VAL from 1 to 0, I found that I couldn't receive data from the IMU. After reviewing previous students' reports, I noticed that they had to change AD0_VAL from 1 to 0 to receive data.
+
+                            I believe the reason for this issue is that this year we are using the SparkFun breakout board, which is different from the one used in previous years.</dd>
+
+
+
+                            
+
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Accelerometer</h2>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                  <iframe
+                                    src="https://www.youtube.com/embed/_rIRA0efREY"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                  </iframe>
+                                </div>
+                              </div>
+                            <p>
+                                The video above demonstrates how the roll and pitch values change when I place the IMU in a horizontal position and different vertical orientations.
+                            </p>
+                            <p>
+                                I used <strong><em>myICM.dataReady()</em></strong> to check if the IMU data is ready and <strong><em>myICM.getAGMT()</em> </strong>to update the accelerometer values for the x, y, and z axes.
+                            </p>
+
+                            <p>
+                                Then, I implemented the formulas shown in the classroom slides on Arduino to calculate the Roll and Pitch values.
+                            </p>
+
+                            
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/a_slide.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/a_slide_code.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+
+                            <p>As shown in the video, the final output differs from the expected output. The table below illustrates this difference.</p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Rotation</th>
+                                            <th>90 (expected)</th>
+                                            <th>0 (expected)</th>
+                                            <th>-90 (expected)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Roll</td>
+                                            <td>88.4 (final)</td>
+                                            <td>-0.3 (final)</td>
+                                            <td>-91.2 (final)</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>Pitch</td>
+                                            <td>87.6 (final)</td>
+                                            <td>-0.8 (final)</td>
+                                            <td>-88.7 (final)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <p>To better observe roll and pitch, I added a new case, <strong><em>GET_Pitch_Roll</em></strong>, to the <strong>Lab 1 code</strong>. This allows the IMU to transmit data to my computer. Therefore, I collected 150 data points at a 50ms interval.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab2/a_RPShow.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>It can be observed that the data is not perfectly smooth and contains noise. To analyze the noise, I studied how to apply the Fourier Transform in Python by referring to the following resource:  
+                            <a href="https://www.alphabold.com/fourier-transform-in-python-vibration-analysis/">Fourier Transform in Python - Vibration Analysis</a>. </p>
+
+                            <p>Using this method, I obtained the following noise spectrum.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-4 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/noise_!.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-4 col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/noise_2.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+                            <p>From the two images above, I observed that the noise is mainly concentrated in the <strong>0~2 Hz</strong>range. Therefore, I selected <strong>2 Hz</strong> as the cutoff frequency.</p>
+                            <p>Below is the Python code for implementing a low-pass filter and the result after applying the low-pass filter:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-4 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/low_pass.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-4 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/lowpass_result.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <p>It can be observed that after applying the low-pass filter, the data graph becomes much smoother and a amount of noise is reduced.</p>
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Gyroscope</h2>
+
+                            <p>For the <strong>gyroscope</strong>, the general approach is similar to that of the accelerometer. </p>
+
+                            <p>First, based on the following calculation formulas, I added a new case, <strong>GET_PRY_Gyroscope</strong>, to the <strong>Lab 1</strong> code to compute <strong>roll, pitch, and yaw</strong> using the gyroscope.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-4 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/g_formula.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-4 col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab2/g_code.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            </div>
+
+                                <p>As a result, I obtained the following output images:</p>
+                                <div class="container my-4">
+                                    <div class="row g-4 justify-content-center">
+                                        <div class="col-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab2/g_ouput.png" 
+                                                alt="blink" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <p>Then, I combined the <strong>Gyroscope</strong> and <strong>Accelerometer</strong> code to obtain a comparison graph of <strong>roll</strong> and <strong>pitch</strong> from both sensors. Also, I got the ouput of Yaw.</p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-3 justify-content-center">
+                                    
+                                        <!-- 第一张图片（Artemis Nano） -->
+                                        <div class="col-sm-4 col-md-8">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/roll_c.png" 
+                                                    alt="Artemis Nano" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- 第二张图片（Type-C Cables） -->
+                                        <div class="col-sm-4 col-md-8">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/pitch_c.png"
+                                                    alt="USB Type-C Cables" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+                                
+                                        <!-- 第三张图片 -->
+                                        <div class="col-sm-4 col-md-8">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/yaw.png"
+                                                    alt="USB Type-C Cables" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p>It can be observed that the <strong>Accelerometer</strong> is more sensitive to noise compared to the <strong>Gyroscope</strong>. Even minor noise can cause significant fluctuations in the Accelerometer readings.</p>
+
+                                <p>On the other hand, the <strong>Gyroscope</strong> tends to exhibit a continuous increase or decrease over time. This phenomenon is not very noticeable in the graph above because the dataset is relatively small and the time intervals are short.</p>
+
+                                <p>However, in the following experiment on the <strong>complementary filter</strong>, this issue becomes more evident.</p>
+                                <p>Based on the content from the classroom slides, I got the formula for the <strong>complementary filter</strong> and implemented it in the <strong>Arduino</strong> code.</p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                    
+                                    <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-4 col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab2/C_formula.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-4 col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab2/C_filter_code.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>The most important step was determining the value of <strong>alpha</strong>. I experimented with multiple alpha values and finally settled on <strong>0.7</strong>.</p>
+
+                                <p>Below are the output graphs for <strong>alpha = 0.7</strong> and <strong>alpha = 0.2</strong>.</p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-3 justify-content-center">
+                                    
+                                        <!-- 第一张图片（Artemis Nano） -->
+                                        <div class="col-sm-4 col-md-6">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/07pitch.png" 
+                                                    alt="Artemis Nano" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- 第二张图片（Type-C Cables） -->
+                                        <div class="col-sm-4 col-md-6">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/07roll.png"
+                                                    alt="USB Type-C Cables" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+                                
+                                        <!-- 第三张图片 -->
+                                        <div class="col-sm-4 col-md-6">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/02pitch.png"
+                                                    alt="USB Type-C Cables" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4 col-md-6">
+                                            <div class="p-2 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <img src="assets/img/lab2/02roll.png"
+                                                    alt="USB Type-C Cables" 
+                                                    class="img-fluid rounded" 
+                                                    style="max-height: 250px; object-fit: contain; width: 100%;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>From the graphs above, it can be observed that if the value of <strong>alpha</strong> is too low, the final result will overly rely on the <strong>Gyroscope</strong>, causing a continuous increase or decrease over time.</p>
+
+                                <p>However, with <strong>alpha = 0.7</strong>, the filter effectively combines the advantages of both the <strong>Gyroscope</strong> and the <strong>Accelerometer</strong>, producing a more accurate and stable result. Therefore, <strong>alpha = 0.7</strong> is a better choice.</p>
+
+                                <hr class="my-4"/>
+                                <h2 class="text-center mb-4">Sample Data</h2>
+                                <p>First, I commented out all <strong>Serial.print</strong> statements in the main loop to eliminate any delays they might cause.</p>
+
+                                <p>As shown in the code snippet below, I used <strong>ActiveFlag</strong> as a marker to indicate the start of data recording. The function <strong>record_process()</strong> is responsible for transmitting the <strong>x-axis</strong> data from both the <strong>Gyroscope</strong> and <strong>Accelerometer</strong> to my PC.</p>
+
+                                <p>Although this function could also transmit the previously computed <strong>roll, pitch, and yaw</strong>, this part of the lab primarily focuses on discussing data transmission methods and efficiency. Therefore, it has been simplified to only send the x-axis data of the <strong>Gyroscope</strong> and <strong>Accelerometer</strong>.</p>
+
+                                <p>Additionally, I introduced the variable <strong>MissCase</strong> to detect instances where the IMU data is not ready.</p>
+
+                                <div class="container my-4">
+                                    <div class="row g-4 justify-content-center">
+                                        <div class="col-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab2/loop_code.png" 
+                                                alt="blink" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>As shown in the image below, I used <strong>case Loop_Start</strong> and <strong>case Loop_End</strong> to control the start and end of the loop.</p>
+
+                                <p>Additionally, I configured the LED on the <strong>Artemis</strong> to remain <strong>lit</strong> while recording data and to <strong>blink three times</strong> upon completion. This visual indication helps me better determine the current state of the process.</p>
+                                <div class="container my-4">
+                                    <div class="row g-4 justify-content-center">
+                                        <div class="col-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab2/case_code.png" 
+                                                alt="blink" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mx-auto" style="max-width: 600px;">
+                                    <div class="ratio ratio-16x9 mb-3">
+                                      <iframe
+                                        src="https://www.youtube.com/embed/wuxMkb15hlY"
+                                        title="YouTube video"
+                                        allowfullscreen>
+                                      </iframe>
+                                    </div>
+                                </div>
+                                <p>Using the code shown in the image below, I collected data over a period of <strong>5 seconds</strong>.</p>
+
+                                <p>During this time, I recorded <strong>1,131 samples</strong>, and the value of <strong>MissCase</strong> was <strong>0</strong>. This indicates that the <strong>IMU generates new data faster than the main loop executes</strong>.</p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                    
+                                    <!-- 第一张图片（Artemis Nano） -->
+                                    <div class="col-sm-4 col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab2/loop_j_code.png" 
+                                            alt="Artemis Nano" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                
+                                    <!-- 第二张图片（Type-C Cables） -->
+                                    <div class="col-sm-4 col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab2/loop_output.png"
+                                            alt="USB Type-C Cables" 
+                                            class="img-fluid rounded" 
+                                            style="max-height: 200px; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                        <hr class="my-4"/>
+                        <h2 class="text-center mb-4">Record a stunt!</h2>
+                        <p>I originally hoped that the car would <strong>dash onto the cardboard and perform a cool backflip</strong>, but that didn’t quite work out.</p>
+
+                        <p>However, the <strong>high-speed spin</strong> was still a pretty awesome stunt!</p>
+                        <div class="mx-auto" style="max-width: 600px;">
+                            <div class="ratio ratio-16x9 mb-3">
+                              <iframe
+                                src="https://www.youtube.com/embed/_Qolb9cZdKE"
+                                title="YouTube video"
+                                allowfullscreen>
+                              </iframe>
+                            </div>
+                        </div> 
+                        <hr class="my-4"/>
+                        <h2 class="text-center mb-4">Conclusion:</h2>
+                        <p class="text-justify">
+                            <p>In this lab, I learned how to obtain data from the <strong>accelerometer</strong> and <strong>gyroscope</strong> and calculate the corresponding <strong>roll</strong>, <strong>pitch</strong>, and <strong>yaw</strong>.</p>
+
+                            <p>More importantly, I learned to use the <strong>low-pass filter</strong> and <strong>complementary filter</strong> to obtain reliable data. This prepares me for ensuring accurate navigation of the car in future tasks.</p>
+                            
+
+                        </div><!-- /container-fluid -->
+                    </div><!-- /modal-body -->
+
+                    <!-- Modal 底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+
+                </div><!-- /modal-content -->
+            </div><!-- /modal-dialog -->
+        </div>
+    </div>
+        </div> <!-- end container-fluid -->
+        </div> <!-- end modal-body -->
+        </div> 
+
 
 
         <!-- 使用Bootstrap 5.x为例 -->
