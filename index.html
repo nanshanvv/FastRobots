@@ -134,7 +134,7 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="assets/img/portfolio/fullsize/3.jpg" title="Project Name">
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab3Modal">
                             <img class="img-fluid" src="assets/img/portfolio/thumbnails/3.jpg" alt="..." />
                             <div class="portfolio-box-caption">
                                 <div class="project-category text-white-50">Category</div>
@@ -236,7 +236,7 @@
         <!-- Contact-->
 
 
-                <!-- Here is the code for report -->
+                <!-- Here is the code for LAB 1 report -->
         <div class="modal fade" id="lab1Modal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
@@ -988,7 +988,7 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
             </div><!-- /modal-dialog -->
         </div>
 
-        
+                <!-- Here is the code for LAB 2 report -->
         <div class="modal fade" id="lab2Modal" tabindex="-1" aria-labelledby="lab2ModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
@@ -1506,11 +1506,527 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
         </div> <!-- end container-fluid -->
         </div> <!-- end modal-body -->
         </div> 
+        
+                <!-- Here is the code for LAB 3 report -->       
+        <div class="modal fade" id="lab3Modal" tabindex="-1" aria-labelledby="lab2ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+
+                    <!-- Modal 头部 -->
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab1ModalLabel">Lab 3 Time of Flight Sensors</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Modal 主体：通过 p-4 增加内边距，max-height: 80vh 和 overflow-y: auto 用于可滚动 -->
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+
+                        <!-- 可以在内部再包一层容器，便于统一排版 -->
+                        <div class="container-fluid">
+
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Lab 3: IMU</h2>
+                            <h2>Objective</h2>
+                            <p>The goal of this lab is to equip the robot with distance sensors. By optimizing the sampling speed and reliability of sensor readings, the robot can improve its driving performance.</p>
+                            
+                            <h2>Parts Required</h2>
+                            <ul>
+                                <li>1 × SparkFun RedBoard Artemis Nano</li>
+                                <li>1 × USB cable</li>
+                                <li>2 × 4m ToF sensors</li>
+                                <li>1 × 9DOF IMU sensor</li>
+                                <li>1 × QWIIC Breakout board</li>
+                                <li>3 × Qwiic connectors</li>
+                                <li>1 × 650mAh battery from the RC car</li>
+                                <li>1 × Ruler or graph paper</li>
+                                <li>1 × Wire strippers/ Mini cutters</li>
+                                <li>1 × Soldering iron</li>
+
+                            
+                            <hr class="my-4"/><!-- 分割线 -->
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Before Soldering</h2>
+                            <h3 class="text-center mb-4">I2C ADDRESS</h3>
+                            <p class="text-justify">
+                            Following the information shown by the datasheet, the I2C sensor address should be 0x52. The detail is shown on the pic blow.
+                            </p>
+                            <!-- 图片区容器 -->                       
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab3/address.jpg" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="text-center mb-4">2 ToF sensors: How to use and Future Design Considerations</h3>
+                            <h5>Using Two TOF Sensors:</h5>
+                            <p>To use two TOF sensors simultaneously, I nedd to use XSHUT pin. By first disabling one sensor via the XSHUT pin, only one active sensor remains on the I²C bus. Then, an I²C command is used to assign a new address to this available sensor. After that, the other sensor is re-enabled (it still retains the default address at this point).</p>
+                            <p>Now that the two sensors have different addresses, the host can communicate with both sensors separately, allowing them to be used simultaneously.</p>
+                            <h5>Future Design Considerations</h5>
+                            <p>After watching the 2024 Spring students' Lab 12 video, I noticed that our final autonomous driving experiment will take place on a flat surface without slopes, and the obstacles are not difficult-to-detect objects like tilted poles.</p>
+                            <p>Therefore, my approach is to position one ToF sensor facing forward and the other facing backward to detect obstacles in both movement directions.</p>
+                            <p>However, I will not simply place the two sensors directly at the front and rear of the car. Instead, I will tilt both sensors slightly at a 30-degree angle (the line connecting the two sensors forms a 30-degree angle with the car's central axis). This way, I can also achieve side obstacle detection.</p>
+
+                            <h3 class="text-center mb-4">Last Step Before Soldering: Sketch of wiring diagram</h3>
+                            <!-- 图片区容器 -->                       
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab3/connection.jpeg" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+
+
+
+
+                            
+
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Soldering, Testing and Data Recording</h2>
+                            <h3 class="text-center mb-4">Soldering</h3>
+                            <p>First, I soldered all the parts according to the Sketch of the wiring diagram, as shown in the figure below.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/finalconnectnon.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>To prepare for future wireless connectivity, I also soldered the battery wires to the JST jumper.</p>
+
+                            <p>Additionally, I tested whether the Artemis board could function properly with battery power alone by running the test code from Lab 1.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                  <iframe
+                                    src="https://www.youtube.com/embed/EJFTL-81p44?si=Egw5MnnmGdrJLcy5"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                  </iframe>
+                                </div>
+                            </div>
+                            <p>From the video, it can be seen that the Artemis board continues to function normally with battery power alone.</p>
+                            
+                            
+                            
+                            
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Example1_wire_I2C</h3>
+                            <p>In this section, I ran <code>Example1_wire_I2C</code> to check whether the I2C addresses matched my expectations. The results are shown in the figure below.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/addressscan.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>I noticed that the scanned I2C address was 0x29, which differs from the address (0x52) provided in the datasheet. Why is this?</p>
+
+                            <p>The reason is that the datasheet provides an 8-bit address (including the read/write bit), while I²C scanning tools (such as <code>Example1_wire_I2C.ino</code>) typically use a 7-bit address.</p>
+
+                            <p>The 8-bit address 0x52 corresponds to <code>0b1010010</code>. Removing the last bit (shifting right by one bit) results in <code>0b0101001</code>, which is 0x29. This explains why my scan detected 0x29.</p>
+                           <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Different sensor mode and Discussion</h3>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/testphoto.jpg" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>In this section, since <code>.setDistanceModeMedium()</code> is only applicable to the Pololu VL53L1X library, I chose to test two modes: <code>setDistanceModeShort();</code> and <code>setDistanceModeLong();</code>.</p>
+                            <p>I also visualized the obtained data to analyze the differences between these two modes.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/modedata.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>According to the data, within 1.15 meters, both modes exhibit nearly identical accuracy. However, beyond 1.2 meters, <code>DistanceModeShort</code> shows significant errors.</p>
+
+                            <p>I believe this may be partially related to the measurement environment. Since the measurements were conducted in a dimly lit room at night, the lack of light could have contributed to the errors in the <code>DistanceModeShort</code> mode.</p>
+
+                            <p>This indirectly confirms that the sensor is somewhat sensitive to light intensity.</p>
+                            <hr class="my-4"/>
+                            
+                            <h3 class="text-center mb-4">Let's make both sensors work simultaneously!</h3>
+                            <p>As shown in the figure, I connected the XSHUT pin to pin A7 of the Artemis Board.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/pin.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>The following code demonstrates that by controlling the voltage level of the A7 pin, I successfully assigned a new address to the second sensor.</p>
+
+                            <p>With this setup, both sensors can now operate simultaneously.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/code1.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                  <iframe
+                                    src="https://www.youtube.com/embed/PZuErG0NutU?si=5taKsmizPEO1RqBO"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                  </iframe>
+                                </div>
+                            </div>
+
+
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Bottleneck Testing</h3>
+                            <p>To determine what limits the performance bottleneck of the ToF sensors, I made the following modifications to the code.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/Bottleneck.jpg" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>In the <code>setup()</code> function, I started the distance measurement using <code>distanceSensor0.startRanging();</code> and <code>distanceSensor1.startRanging();</code> without waiting for it to complete.</p>
+
+                            <p>In the <code>loop()</code> function, I printed <code>millis()</code> in every iteration to measure the execution speed of the loop.</p>
+
+                            <p>If the data is ready, the distance is read and printed.</p>
+
+                            <p>If the data is not yet ready, it is skipped without blocking the main loop.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/BottleneckResult.jpg" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>From the output results, we can observe the following:</p>
+
+                            <p>The <code>Time(ms)</code> value fluctuates between 30 and 50 ms, indicating that the <code>loop()</code> function runs approximately every 15-50 ms.</p>
+
+                            <p>However, new sensor data is not available on every iteration. For example, at 38415 ms and 38627 ms, no new data was recorded.</p>
+
+                            <p>This suggests that sensor data updates only every 30-50 ms.</p>
+
+                            <p><strong>Therefore, the current bottleneck is the sensor's own ranging time.</strong></p>
+                            
+                            
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Recording ToF and IMU data for 10 seconds</h3>
+                            <p>Based on the functions implemented in Lab 2, I created the function <code>GET_Pitch_Roll_Distance_10s</code>.</p>
+
+                            <p>The primary function of this implementation is to simultaneously start two ToF sensors and the IMU, record data for 10 seconds, and transmit the collected data to my computer via Bluetooth. The following is a partial screenshot of the code: </p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab3/functioncode.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>Finally, I obtained a graph showing the relationship between ToF data and time, as well as a graph illustrating the relationship between IMU data and time.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                
+                                <!-- 第一张图片（Artemis Nano） -->
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab3/PRT.png" 
+                                        alt="Artemis Nano" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            
+                                <!-- 第二张图片（Type-C Cables） -->
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab3/DST.png"
+                                        alt="USB Type-C Cables" 
+                                        class="img-fluid rounded" 
+                                        style="max-height: 200px; object-fit: contain;">
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Additional tasks (5000 Level)</h2>
+                            <h3 class="text-center mb-4">Discussion on the advantages and disadvantages of different distance sensors</h3>
+
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <tr>
+                                    <th>Sensor Type</th>
+                                    <th>Functionality</th>
+                                    <th>Pros</th>
+                                    <th>Cons</th>
+                                </tr>
+                                <tr>
+                                    <td>Time-of-Flight (ToF) Sensor</td>
+                                    <td>Measures the time taken for infrared light to travel to an object and reflect back to determine distance.</td>
+                                    <td>
+                                        <ul>
+                                            <li>High accuracy</li>
+                                            <li>Works well in varying lighting conditions</li>
+                                            <li>Can measure long distances (up to several meters)</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>More expensive compared to other IR sensors</li>
+                                            <li>Performance may degrade on highly reflective or transparent surfaces</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Infrared Proximity Sensor</td>
+                                    <td>Detects objects based on the intensity of reflected infrared light.</td>
+                                    <td>
+                                        <ul>
+                                            <li>Low cost</li>
+                                            <li>Fast response time</li>
+                                            <li>Simple implementation</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>Limited accuracy and range</li>
+                                            <li>Performance affected by ambient light</li>
+                                            <li>Cannot provide precise distance measurements</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Structured Light Sensor</td>
+                                    <td>Projects an infrared pattern onto an object and analyzes the distortion to calculate depth.</td>
+                                    <td>
+                                        <ul>
+                                            <li>Can capture 3D depth information</li>
+                                            <li>More accurate than simple proximity sensors</li>
+                                            <li>Used in facial recognition and object scanning</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>Sensitive to ambient infrared light</li>
+                                            <li>Limited effective range</li>
+                                            <li>Computationally intensive</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Laser Range Finder (LIDAR)</td>
+                                    <td>Uses a laser pulse and measures the time taken for it to return, similar to ToF but typically with higher precision.</td>
+                                    <td>
+                                        <ul>
+                                            <li>Very accurate over long distances</li>
+                                            <li>Works well in low-light conditions</li>
+                                            <li>Commonly used in autonomous vehicles</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul>
+                                            <li>Expensive compared to other distance sensors</li>
+                                            <li>May struggle with highly reflective or transparent surfaces</li>
+                                            <li>Larger and more power-intensive</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">ToF sensors are sensitive to color and texture</h3>
+                            <p>In this section, I collaborated with my classmate <a href="https://haixizhang.github.io/FastRobot/" target="_blank">@Zhang, Haixi</a> to test the sensor's performance under different conditions: a black box, a white box, and a transparent glass bottle.</p>
+
+                            <p>The results are shown in the table below.</p>
+                            <table border="1" cellspacing="0" cellpadding="5">
+                                <tr>
+                                    <th>Collected Data vs Expected Data (cm)</th>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>5</th>
+                                    <th>10</th>
+                                    <th>15</th>
+                                    <th>20</th>
+                                    <th>25</th>
+                                    <th>30</th>
+                                </tr>
+                                <tr>
+                                    <td>Black Box</td>
+                                    <td>1.8</td>
+                                    <td>3.8</td>
+                                    <td>5.3</td>
+                                    <td>9.3</td>
+                                    <td>14.1</td>
+                                    <td>24.5</td>
+                                    <td>27.5</td>
+                                    <td>29.6</td>
+                                </tr>
+                                <tr>
+                                    <td>White Box</td>
+                                    <td>1.2</td>
+                                    <td>2.5</td>
+                                    <td>4.6</td>
+                                    <td>10.2</td>
+                                    <td>15.1</td>
+                                    <td>20.4</td>
+                                    <td>25.7</td>
+                                    <td>30.7</td>
+                                </tr>
+                                <tr>
+                                    <td>White Glass Bottle</td>
+                                    <td>0.9</td>
+                                    <td>1.8</td>
+                                    <td>3.9</td>
+                                    <td>9.8</td>
+                                    <td>13.8</td>
+                                    <td>19.1</td>
+                                    <td>24.2</td>
+                                    <td>29.3</td>
+                                </tr>
+                            </table>
+                            <p>After conversation, we got those conclusions:</p>
+
+                            <h4>1. Performance in the Black Box</h4>
+                            <p>The ToF sensor shows relatively higher deviation in the black box, especially at shorter distances (e.g., at 1 cm, the measured distance is 1.8 cm instead of 1 cm). This is likely because black surfaces absorb more infrared light, reducing the amount of reflected light detected by the sensor. As the distance increases, the accuracy improves slightly, but errors remain noticeable.</p>
+
+                            <h4>2. Performance in the White Box</h4>
+                            <p>The white box results are more accurate compared to the black box. White surfaces reflect more infrared light, allowing the sensor to receive a stronger signal. At closer distances, the error is minimal, and even at longer distances, the measurements are quite close to the expected values.</p>
+
+                            <h4>3. Performance with the White Glass Bottle</h4>
+                            <p>The sensor's performance with the white glass bottle is slightly worse than the white box but better than the black box. Transparent or semi-transparent materials like glass can refract or scatter infrared light, leading to some inaccuracies. At close distances, the measured values are slightly lower than expected, possibly due to partial transmission of light through the material rather than full reflection.</p>
+
+                            <h4>4. Overall Observations</h4>
+                            <ul>
+                                <li>The ToF sensor performs best with highly reflective surfaces like the white box.</li>
+                                <li>Black surfaces reduce accuracy due to their absorption of infrared light.</li>
+                                <li>Transparent materials like glass introduce some measurement errors due to light refraction and scattering.</li>
+                                <li>At longer distances, all three materials show improved accuracy, suggesting that environmental factors impact shorter-range measurements more significantly.</li>
+                            </ul>
+
+
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Conclusion</h2>
+                            <p>In this experiment, I learned how to use multiple sensors simultaneously on a single I2C bus and record data.</p>
+
+                            <p>Additionally, I discovered that sensor performance varies under different lighting conditions and when detecting obstacles made of different materials.</p>
+
+                            <p>This insight provides valuable guidance for my future autonomous driving experiments with the robot.</p>
+
+
+
+                            
+
+     
+
+                            
+                            
+
+
+
+
+
+
+
+
+
+
+
+                            
+
+                        </div><!-- /container-fluid -->
+                    </div><!-- /modal-body -->
+
+                    <!-- Modal 底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+
+                </div><!-- /modal-content -->
+            </div><!-- /modal-dialog -->
+        </div>
+    </div>
+        </div> <!-- end container-fluid -->
+        </div> <!-- end modal-body -->
+        </div> 
 
 
 
         <!-- 使用Bootstrap 5.x为例 -->
-        <div class="modal fade" id="lab2Modal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
+        <div class="modal fade" id="labModal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered">
                 <div class="modal-content border-0 shadow">
 
