@@ -143,11 +143,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" href="assets/img/portfolio/fullsize/4.jpg" title="Project Name">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/4.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab4Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic4.jpg" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">Lab 4</div>
+                                <div class="project-name">Motors and Open Loop Control</div>
                             </div>
                         </a>
                     </div>
@@ -1999,7 +1999,378 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
             </div><!-- /modal-dialog -->
         </div>
 
+                <!-- Here is the code for LAB 4 report -->
+        <div class="modal fade" id="lab4Modal" tabindex="-1" aria-labelledby="lab2ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
 
+                    <!-- Modal 头部 -->
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab1ModalLabel">Lab 4 Motors and Open Loop Control</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Modal 主体：通过 p-4 增加内边距，max-height: 80vh 和 overflow-y: auto 用于可滚动 -->
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+
+                        <!-- 可以在内部再包一层容器，便于统一排版 -->
+                        <div class="container-fluid">
+
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Lab 4 Motors and Open Loop Control</h2>
+                            <h2>Objective</h2>
+                            <p>The goal of this lab is to transition from manual control to open-loop control for the car. By the end of this lab, your car should be able to follow a predefined sequence of movements using the Artemis board and two dual motor drivers. Ultimately, this experiment enables the car to achieve both straight-line motion and circular movement under the control of the Artemis board.</p>
+                            
+                            <h2>Parts Required</h2>
+                            <ul>
+                                <li>1 x SparkFun RedBoard Artemis Nano</li>
+                                <li>1 x USB cable</li>
+                                <li>1 x 9DOF IMU sensor</li>
+                                <li>2 x 4m ToF sensor</li>
+                                <li>1 x QWIIC Breakout board</li>
+                                <li>2 x Qwiic connector</li>
+                                <li>1 x JST2 connector + cable</li>
+                                <li>1 x Force1 RC car</li>
+                                <li>1 x Li-Ion 3.7V 850mAh battery</li>
+                                <li>2 x Dual motor drivers</li>
+                                <li>1 x Wire strippers / Mini cutters</li>
+                                <li>1 x Soldering iron</li>
+                                <li>1 x External power supply</li>
+                                <li>1 x Oscilloscope</li>
+                            </ul>
+                            
+
+                            
+                            <hr class="my-4"/><!-- 分割线 -->
+                            <!-- 第一节：简介 -->
+                            <h2 class="text-center mb-4">Before Soldering</h2>
+                            <h3 class="text-center mb-4">Expected Connection Diagram</h3>
+                            <p>The following image shows the expected connection diagram. I will perform the soldering based on this diagram.</p>
+
+                            <!-- 图片区容器 -->                       
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab4/connectpic.jpeg" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>As shown in the diagram, I will use A2, A3, A13, and A14 on the Artemis board as motor control pins. Additionally, I will use a 3.7V 850mAh Li-Ion battery to power both motor drivers.</p>  
+                            <p>In Lab 3, I successfully powered the Artemis board using a 3.7V 650mAh battery. In this lab, I will continue using the same approach, allowing the Artemis board to operate without a USB power connection.</p>
+
+                            <p><em><strong>Question: I was asked to power the Artemis and the motor drivers/motors from separate batteries. Why is that?</strong></em></p>
+                            <p>The Artemis board and the motor drivers/motors should be powered by separate batteries to prevent electrical interference and voltage fluctuations. Motors typically draw a significant amount of current, which can cause sudden voltage drops and introduce noise into the power supply. If both the Artemis board and the motors share the same power source, these fluctuations could lead to instability in the Artemis board, causing unexpected behavior or even system resets. By using separate batteries, it ensure a more stable and reliable power supply for both the control system and the motors.</p>
+
+
+
+
+
+
+                            
+
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Lab Tasks</h2>
+                            <h3 class="text-center mb-4">Oscilloscope and Signal Display</h3>
+                            <p>First, I soldered the motor driver and the Artemis board according to the previously planned connection diagram. At this stage, I did not connect BOUT and AOUT to the motors. Instead, I connected them to the oscilloscope to observe whether there was any signal output. The results are shown in the video.</p>
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/Ruuqfw7jzYw"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>Later, I realized that in the video, I had connected the oscilloscope's output and input ports incorrectly. As a result, although there was a signal output, it was not the expected rectangular waveform. The following image shows the correct signal waveform obtained after properly using the oscilloscope.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab4/Oscilloscope.jpg" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>Here is my test code</p>
+<pre>
+    <code>
+    void setup() {
+        pinMode(ABIN1, OUTPUT);
+        pinMode(ABIN2, OUTPUT);
+    }
+    
+    void loop() {
+        analogWrite(ABIN1, 255);
+        analogWrite(ABIN2, 0);
+    }
+    </code>
+    </pre>
+
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Single Motor Testing</h3>
+                            <p>After confirming that the signal was successfully output, I connected the motor driver to the motor and supplied power. The results are shown in the video.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/-M42pLoUfuo"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>Additionally, I conducted a speed variation test on a single motor. The code and video are shown below:</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab4/speedchangecode.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/opdCd6hKUWE"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>I observed that during the transition from rest to motion, the motor voltage was relatively high. I believe this is because the motor needs to overcome significant resistance when starting from a stationary state, leading to this effect.</p>
+                            
+                            
+                            
+                            
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Dual Motor Testing</h3>
+                            <p>After successfully testing the operation of a single motor, I soldered all the parts together according to the planned connection diagram and conducted a dual motor operation test. The code and video are shown below.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab4/twomotor.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/WsRdcqc1WQM"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>From the video, it can be seen that the car can accelerate both forward and backward, indicating that all my circuit connections are correct!</p>  
+                            <p>Next, I will use another battery to power the Artemis board and make the car run on the ground!</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/5d2KVI9zj4M"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>From the video above, it can be seen that with two batteries powering the system, the car successfully runs. (However, setting the PWM value to 255 at the beginning was a bad idea—the car was so fast that it almost took off!)</p>
+                            <p>The image below shows how I secured all the components.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab4/car.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+                                
+
+
+
+                            
+                            
+                            
+                            
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">The Lower Limit in PWM Value</h3>
+                            <p>In this part of the experiment, I determined the minimum PWM values required to make the car move using the enumeration method. The results are:</p>  
+                            <ul>
+                                <li>Left side: 37</li>  
+                                <li>Right side: 55</li>  
+                            </ul>
+                            <p>The following is a video showing the car in motion.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/jaKsRbJndrU"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+
+
+
+                            <hr class="my-4"/>
+                            <h3 class="text-center mb-4">Straight-Line Motion Test and Open-Loop Control Test</h3>
+                            <p>In the previous experiments, I noticed that the right wheel had significantly less power than the left wheel. To achieve straight-line motion, I used the following PWM values in my first test:</p>  
+                            <ul>
+                                <li>Left wheel: 55</li>  
+                                <li>Right wheel: 40</li>  
+                            </ul>
+                            <p>The results are shown in the video. The car exhibited a leftward drift.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/BAsGd1myEXs"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>After multiple attempts, I adjusted the PWM values as follows and successfully achieved straight-line motion:</p>  
+                            <ul>
+                                <li>Left wheel: 65</li>  
+                                <li>Right wheel: 43</li>  
+                            </ul>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/7jxR7sNOMfM"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>From the video, it can be seen that the car is able to travel in a straight line for a distance of more than 2 meters.</p>
+                            <p>Next, I conducted an open-loop test on the car, making it move forward, backward, and perform left and right turns. To my surprise, in order for the car to turn in place, I had to set the PWM value to at least 120. This indicates that the car needs to overcome significant friction when turning.</p>
+
+                            <p>I believe this is due to the car's tires being very rough and having deep treads, which create a high amount of friction against the ground. Therefore, in future labs, I might wrap the car's tires with smooth tape to reduce friction.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/_Z-NaFkoqo8"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+
+
+
+                            
+                             
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Additional tasks (5000 Level)</h2>
+                            <h3 class="text-center mb-4">Discussion on analogWrite Frequency</h3>
+                            <p>Returning to the video below, it can be observed that the frequency of the signal generated by <code>analogWrite</code> is quite high, reaching nearly 190Hz.</p>  
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/-M42pLoUfuo"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+                            <p>However, we need to consider potential bottlenecks. If this frequency is lower than the data transmission frequency of the IMU or other sensors, manually setting a higher frequency may become necessary.</p>
+                            <h3 class="text-center mb-4">minimum PWM value</h3>
+                            <p>The following code represents my approach to finding the minimum PWM value for maintaining motion:</p>  
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab4/5000.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>Based on previous experiments, I determined the PWM values required to start the car from a stationary state:</p>  
+                            <ul>
+                                <li>Left wheel: 55</li>  
+                                <li>Right wheel: 40</li>  
+                            </ul>
+
+                            <p>Next, I used a <code>for</code> loop to decrease the PWM value by 2 every 2 seconds until it reached 0. During this process, I observed when the car stopped moving and recorded the time at which it stopped. This allowed me to calculate the minimum PWM value required to sustain motion.</p>
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/wuWPG1GR3xo"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+                            <p>Finally, I determined that the minimum PWM value required to sustain motion is 36 - 38.</p>
+
+
+
+
+
+
+
+
+                            <hr class="my-4"/>
+                            <h2 class="text-center mb-4">Conclusion</h2>
+                            <p>In this lab, I successfully assembled the car. Additionally, this lab made me think about factors that influence the car's eventual "autonomous driving," such as tire friction and the data transmission frequency of different components.</p>  
+
+                            <p>What I found most interesting was that, as a CS major during my undergraduate studies, I had never done so much soldering before. This lab significantly improved my hands-on skills and allowed me to appreciate the beauty of hardware. When the car successfully moved after assembly and soldering, I felt an incredible sense of accomplishment.</p>
+                            
+
+
+                        </div><!-- /container-fluid -->
+                    </div><!-- /modal-body -->
+
+                    <!-- Modal 底部 -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+
+                </div><!-- /modal-content -->
+            </div><!-- /modal-dialog -->
+        </div>
 
         <!-- 使用Bootstrap 5.x为例 -->
         <div class="modal fade" id="labModal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
