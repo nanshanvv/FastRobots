@@ -2650,6 +2650,24 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                             </div>
                             <p>It can be observed that the robot moves forward in a straight line and successfully stops very close to the target distance from the wall—experiment successful!</p>
 
+                            <h4>Different Scenarios: Robot Performance on Carpet</h4>
+
+                            <p>I tested the robot on a carpet using the parameters <code>Kp = 0.1</code>, <code>Ki = 0.0001</code>, <code>Kd = 25</code>, with a target distance of <code>104mm</code>.</p>
+
+                            <p>Below is the video of the experiment:</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/P3BIowmVg28"
+                                    title="YouTube video"
+                                    allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>It can be observed that, with these parameters, the robot performs excellently on the carpet.</p>
+
+
+
                             <hr class="my-4"/>
                             <h2>Discussion on Sampling Rate and Time</h2>
                             <p>Initially, my strategy was to transmit data immediately after computing the current PID values and motor input, instead of separating data transmission from PID control. This approach caused slow data transmission and occasional Bluetooth congestion.</p>
@@ -2676,6 +2694,20 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                 </div>
                             </div>
                             <p>From the code, it can be observed that when the ToF data is detected as not ready, I use the last two ToF data points to calculate the slope and estimate a new ToF value.</p>
+                            <p>Below is the visualization of the obtained data:</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab5/pic.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                     
 
