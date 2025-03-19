@@ -2726,12 +2726,10 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                             integral = constrain(integral, -200, 200);
                             </pre>
                             
-                            <p>Additionally, I reset the integral term when the control output reaches the actuator limit:</p>
+                            <p>Additionally, I reset the motor speed when the control output reaches the actuator limit:</p>
                             
                             <pre>
-                            if (motor_speed == 100 || motor_speed == -100) {
-                                integral = 0;
-                            }
+                                int motor_speed = constrain(control_output, -100, 100);
                             </pre>
                             
                         
@@ -2985,7 +2983,7 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                             
                             
                             <h3 class="text-center mb-4">PID Implementation</h3>
-                            <p>In this section, I will explain how I implemented PID control in the <code>pid_control()</code> function.</p>
+                            <p>In this section, I will explain how I implemented PID control in the <code>pid_control_IMU()</code> function.</p>
 
                             <p>Based on the formula given in the previous section, I computed the values for <strong>P</strong>, <strong>I</strong>, <strong>D</strong>, and <strong>error</strong>. The sum of these terms (<code>P + I + D</code>) was used as the control output, which serves as the input to the motor.</p>
 
@@ -2994,7 +2992,7 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                 <div class="row g-4 justify-content-center">
                                     <div class="col-8">
                                     <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/pidcode.png" 
+                                        <img src="assets/img/lab6/PID_IMU.png" 
                                             alt="blink" 
                                             class="img-fluid rounded" 
                                             style="width: 100%; height: auto; object-fit: contain;">
@@ -3002,45 +3000,39 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                     </div>
                                 </div>
                             </div>
-                            <p>In the code above, the following two lines particularly necessary and important:</p>
-
-                            <pre>
-                            int motor_speed = constrain(control_output, -100, 100);
-                            integral = constrain(integral, -200, 200);
-                            </pre>
 
                             <p>These constraints help prevent excessive values that could destabilize the system:</p>
                             <ul>
-                                <li><code>motor_speed = constrain(control_output, -100, 100);</code> ensures that the motor speed remains within a safe operating range, preventing saturation or excessive speed.</li>
-                                <li><code>integral = constrain(integral, -200, 200);</code> limits the accumulation of the integral term, mitigating integral windup, which can cause instability.</li>
+                                <li><code>int correction = constrain(control_output, -135, 135);</code> ensures that the motor speed remains within a safe operating range, preventing saturation or excessive speed.</li>
+                                <li><code>integral = constrain(integral, -500, 500); </code> limits the accumulation of the integral term, mitigating integral windup, which can cause instability.</li>
                             </ul>
+                            <p>In this lab, I obtained the current yaw value using the <code>get_yaw()</code> function. I implemented <code>get_yaw()</code> using <a href="https://fastrobotscornell.github.io/FastRobots-2025/tutorials/dmp.html" target="_blank">the DMP method</a>. However, the readings from my <code>get_yaw()</code> method always had a delay of approximately 0.3 seconds. Fortunately, I successfully resolved this issue, and the detailed solution is discussed in the <strong>Discussion on Sampling Rate and Time</strong> section.</p>
+                            <p>Here is the code of <code>get_yaw():</code></p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab6/yaw.png" 
+                                            alt="blink" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <h3 class="text-center mb-4"> PID Parameter Tuning and Results</h3>
                             <p>In this section, I will attempt to transmit different <code>Kp</code>, <code>Ki</code>, and <code>Kd</code> values to the robot to achieve stopping distances of 304mm and 204mm from the wall.</p>
 
                             <p><strong>Final Conclusion:</strong></p>
-                            <p><code>Kp = 0.1</code>, <code>Ki = 0.0001</code>, <code>Kd = 8</code> produced the best results.</p>
+                            <p><code>Kp = 4</code>, <code>Ki = 0.0001</code>, <code>Kd = 800</code> produced the best results.</p>
                             <p><strong>Procedure:</strong></p>
-                            <p>First, I tested <code>Kp = 0.7</code>, <code>Ki = 0.001</code>, and <code>Kd = 3</code>. I observed an overshoot phenomenon, where the robot continuously oscillated near the target instead of stabilizing. Additionally, the deceleration was too slow, preventing the robot from stopping properly.</p>
-                            <p>Below are the related data visualization:</p>
-                            <div class="container my-4">
-                                <div class="row g-4 justify-content-center">
-                                    <div class="col-8">
-                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/case1.png" 
-                                            alt="blink" 
-                                            class="img-fluid rounded" 
-                                            style="width: 100%; height: auto; object-fit: contain;">
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p>From the visualization above, it can be observed that after hitting the wall, the sensor readings fluctuate significantly, indicating that the robot is in an oscillatory state.</p>
-                            <p>To improve the slow deceleration and reduce oscillations, I adjusted the parameters to <code>Kp = 0.5</code>, <code>Ki = 0.0001</code>, while keeping <code>Kd</code> unchanged.</p>
+                            <p>First, I tested <code>Kp = 6</code>, <code>Ki = 0</code>, and <code>Kd =</code>. I observed an overshoot phenomenon, where the robot continuously oscillated near the target instead of stabilizing. Additionally, the deceleration was too slow, preventing the robot from stopping properly.</p>
                             <p>Below are the related video and data visualization:</p>
                             <div class="mx-auto" style="max-width: 600px;">
                                 <div class="ratio ratio-16x9 mb-3">
                                     <iframe
-                                    src="https://www.youtube.com/embed/Qspw22FAJoM"
+                                    src="https://www.youtube.com/embed/20x9WL2MQ_w"
                                     title="YouTube video"
                                     allowfullscreen>
                                     </iframe>
@@ -3050,7 +3042,7 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                 <div class="row g-4 justify-content-center">
                                     <div class="col-8">
                                     <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/0.5,0.0001.3.png" 
+                                        <img src="assets/img/lab6/6,0,0,90.png" 
                                             alt="blink" 
                                             class="img-fluid rounded" 
                                             style="width: 100%; height: auto; object-fit: contain;">
@@ -3058,13 +3050,14 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                     </div>
                                 </div>
                             </div>
-                            <p>It can be observed that the robot no longer oscillates, but the deceleration is still too slow, causing it to hit the wall. This can also be seen in the data visualization, where the sensor values increase after the collision.</p>
-                            <p>To achieve faster deceleration while preventing excessive speed, I adjusted <code>Kp</code> to <code>0.1</code> and <code>Kd</code> to <code>8</code>, keeping <code>Ki</code> unchanged.</p>
+                            <p>From the video, it can be seen that the car keeps oscillating back and forth and is unable to stop at the 90-degree angle.</p>
+                            <p>To improve the slow deceleration and reduce oscillations, I adjusted the parameters to <code>Kp = 4</code>, <code>Ki = 0.0001</code>, <code>Kd = 800</code>.</p>
+                            <p>After multiple attempts, I found that the car performed best when Kd = 800. The reason for such a large Kd value is that I used tape to stick the car's wheels, significantly reducing friction, making it more difficult for the car to maintain a specific direction. However, without the tape, the car struggles to resist friction, so using the tape is necessary.</p>
                             <p>Below are the related video and data visualization:</p>
                             <div class="mx-auto" style="max-width: 600px;">
                                 <div class="ratio ratio-16x9 mb-3">
                                     <iframe
-                                    src="https://www.youtube.com/embed/OqxRLzIxIAw"
+                                    src="https://www.youtube.com/embed/b5_Hjnqko44"
                                     title="YouTube video"
                                     allowfullscreen>
                                     </iframe>
@@ -3074,7 +3067,7 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                 <div class="row g-4 justify-content-center">
                                     <div class="col-8">
                                     <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/0.1,0.0001,8.png" 
+                                        <img src="assets/img/lab6/2.png" 
                                             alt="blink" 
                                             class="img-fluid rounded" 
                                             style="width: 100%; height: auto; object-fit: contain;">
@@ -3082,14 +3075,19 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                     </div>
                                 </div>
                             </div>
-                            <p>It can be observed that the robot successfully stops at a distance of 304mm from the wall—experiment successful!</p>
-                            <p>However, I noticed that the robot tends to drift to the left. To address this, I applied the results from Lab 4 to this experiment.</p>
-                            <p>Next, I tested placing the robot at a distance of over 2 meters from the wall and aimed for it to stop at 200mm. To achieve success in this scenario, I adjusted <code>Kd</code> to <code>25</code>.</p>
-                            <p>Below are the related video and data visualization:</p>
+                            <p>From the video, it can be seen that the car rapidly rotated several times before stabilizing at a 90-degree angle. I believe there are several reasons for this result:</p>
+                            <ol>
+                                <li><code>get_yaw()</code> sometimes generates noise (sudden data changes), causing the car to misjudge the angle.</li>
+                                <li>Friction is too low, and the motor speed is too high.</li>
+                            </ol>
+                            <p>After limiting the motor speed, the car became more stable. I believe that using Kalman filtering in Lab 7 will help improve the noise issue.</p>
+
+                            <p>The following shows the car's performance and data visualization after optimization, using the same parameters when <code>target_angle = 0</code>.</p>
+
                             <div class="mx-auto" style="max-width: 600px;">
                                 <div class="ratio ratio-16x9 mb-3">
                                     <iframe
-                                    src="https://www.youtube.com/embed/6PxlNlh3Yr8"
+                                    src="https://www.youtube.com/embed/53OQkPAuDwQ"
                                     title="YouTube video"
                                     allowfullscreen>
                                     </iframe>
@@ -3099,7 +3097,7 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                 <div class="row g-4 justify-content-center">
                                     <div class="col-8">
                                     <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/0.1,0.0001,25.png" 
+                                        <img src="assets/img/lab6/4,0001,800.png" 
                                             alt="blink" 
                                             class="img-fluid rounded" 
                                             style="width: 100%; height: auto; object-fit: contain;">
@@ -3107,44 +3105,34 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                     </div>
                                 </div>
                             </div>
-                            <p>It can be observed that the robot moves forward in a straight line and successfully stops very close to the target distance from the wall—experiment successful!</p>
+                            <p>It can be seen that even when an external force forces the car to change direction, it can promptly correct itself. The experiment was successful!</p>
 
-                            <h4>Different Scenarios: Robot Performance on Carpet</h4>
-
-                            <p>I tested the robot on a carpet using the parameters <code>Kp = 0.1</code>, <code>Ki = 0.0001</code>, <code>Kd = 25</code>, with a target distance of <code>104mm</code>.</p>
-
-                            <p>Below is the video of the experiment:</p>
-                            <div class="mx-auto" style="max-width: 600px;">
-                                <div class="ratio ratio-16x9 mb-3">
-                                    <iframe
-                                    src="https://www.youtube.com/embed/P3BIowmVg28"
-                                    title="YouTube video"
-                                    allowfullscreen>
-                                    </iframe>
-                                </div>
-                            </div>
-                            <p>It can be observed that, with these parameters, the robot performs excellently on the carpet.</p>
+  
 
 
 
                             <hr class="my-4"/>
                             <h2>Discussion on Sampling Rate and Time</h2>
-                            <p>Initially, my strategy was to transmit data immediately after computing the current PID values and motor input, instead of separating data transmission from PID control. This approach caused slow data transmission and occasional Bluetooth congestion.</p>
+                            <p>In Lab 5, I encountered an issue with DMP reading delays: after changing the car's direction, the DMP would take about 0.3 seconds to update the output angle. This issue troubled me for nearly three days. Later, after checking the tutorial, I found that the following code was crucial:</p>
 
-                            <p>To resolve this issue, I separated data transmission and PID control into two different cases, which effectively eliminated Bluetooth congestion.</p>
+                            <pre>
+                            success &= (myICM.setDMPODRrate(DMP_ODR_Reg_Quat6, 4) == ICM_20948_Stat_Ok);
+                            </pre>
                             
-                            <p>My final sampling data size was <strong>500</strong>, with a total duration of <strong>5 seconds</strong>.</p>
+                            <p>In the example code, the original line was:</p>
                             
-                            <p>However, in a previous sensor lab, I observed that sometimes, during the loop execution, the sensor data was not yet ready. This occasionally resulted in empty sensor readings within the loop. To address this issue, a data extrapolator needs to be implemented.</p>
-                            <hr class="my-4"/>
-                            <h2>Extrapolation</h2> 
-                            <p>To prevent cases where the ToF sensor might lack data due to its different frequency from the loop, I implemented a data extrapolator using linear interpolation.</p>
+                            <pre>
+                            success &= (myICM.setDMPODRrate(DMP_ODR_Reg_Quat6, 0) == ICM_20948_Stat_Ok);
+                            </pre>
+                            
+                            <p>However, this setting caused the reading speed to be too slow, and the DMP queue could get filled up, leading to severe DMP delays. By reducing the DMP output rate, the Artemis loop processes data faster than the DMP generates it, preventing the queue from becoming overloaded.</p>
+                            
                             <p>The relevant code is shown below:</p>
                             <div class="container my-4">
                                 <div class="row g-4 justify-content-center">
                                     <div class="col-8">
                                     <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/explore.png" 
+                                        <img src="assets/img/lab6/DMP.png" 
                                             alt="blink" 
                                             class="img-fluid rounded" 
                                             style="width: 100%; height: auto; object-fit: contain;">
@@ -3152,21 +3140,6 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                                     </div>
                                 </div>
                             </div>
-                            <p>From the code, it can be observed that when the ToF data is detected as not ready, I use the last two ToF data points to calculate the slope and estimate a new ToF value.</p>
-                            <p>Below is the visualization of the obtained data:</p>
-                            <div class="container my-4">
-                                <div class="row g-4 justify-content-center">
-                                    <div class="col-8">
-                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                        <img src="assets/img/lab5/pic.png" 
-                                            alt="blink" 
-                                            class="img-fluid rounded" 
-                                            style="width: 100%; height: auto; object-fit: contain;">
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-
 
                     
 
@@ -3182,30 +3155,17 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                             <p>To prevent integral wind-up, I implemented a constraint on the integral term, ensuring it remains within a predefined range:</p>
                             
                             <pre>
-                            integral = constrain(integral, -200, 200);
+                            integral = constrain(integral, -500, 500);
                             </pre>
                             
-                            <p>Additionally, I reset the integral term when the control output reaches the actuator limit:</p>
+                            <p>Additionally, I reset the Speed term when the control output reaches the actuator limit:</p>
                             
                             <pre>
-                            if (motor_speed == 100 || motor_speed == -100) {
-                                integral = 0;
-                            }
+                                int correction = constrain(control_output, -135, 135);
                             </pre>
-                            
-                        
-
-
-
-
                             <hr class="my-4"/>
-                            <h2>Acknowledgments</h2>
-
-                            <p><strong>Thanks to TA: @Cameron Urban</strong></p>
-                            <p>My ToF data was consistently problematic, preventing me from completing Lab 5 on time. Cameron identified that some solder joints on my ToF sensor might be causing the issue and personally demonstrated better soldering techniques. Under his guidance, I resoldered both ToF sensors and other potential problem areas.</p>
-                            
-                            <p><strong>Thanks to my partner: @Haixi Zhang</strong></p>
-                            <p>Haixi and I discussed the individual effects of <code>Kp</code>, <code>Ki</code>, and <code>Kd</code> on the robot’s behavior. He also shared valuable tuning techniques, which helped improve the PID parameter selection process.</p>
+                            <h2>Summary:</h2>
+                            <p>In this lab, I applied PID to direction control and learned how to minimize the impact of noise on the output.</p>
                                             
 
 
