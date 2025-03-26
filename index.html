@@ -170,11 +170,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab1Modal">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab7Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic7.png" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">Lab 7</div>
+                                <div class="project-name">Kalman filter</div>
                             </div>
                         </a>
                     </div>
@@ -3180,6 +3180,314 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
                 </div><!-- /modal-content -->
             </div><!-- /modal-dialog -->
         </div>
+                    <!-- Lab 7 Modal -->
+        <div class="modal fade" id="lab7Modal" tabindex="-1" aria-labelledby="lab7ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+        
+                <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 7: Kalman Filter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+        
+                <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+                <div class="container-fluid">
+                    <h2 class="text-center mb-4">Lab 7: Kalman Filter</h2>
+        
+                    <h2>Objective</h2>
+                    <p>The goal of this lab is to implement a Kalman Filter to enhance distance estimation using the ToF sensor. This enables the robot to move faster towards a wall while still making accurate stop/turn decisions.</p>
+        
+                    <h2>Parts Required</h2>
+                    <ul>
+                    <li>1 x Fully assembled robot, with Artemis, TOF sensors, and an IMU.</li>
+                    </ul>
+        
+                    <hr class="my-4"/>
+                    <h2>Step 1: Estimate Drag and Momentum</h2>
+                    <p>Below is the function code on the Arduino side and the command sending code on the Python side.</p>
+                    <div class="container my-4">
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-md-8">
+                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                <img src="assets/img/lab7/DM Arduino.png" alt="Step response data" class="img-fluid rounded" style="width: 100%; height: auto;">
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="container my-4">
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-md-8">
+                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                <img src="assets/img/lab7/DM python.png" alt="Step response data" class="img-fluid rounded" style="width: 100%; height: auto;">
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    <p>From the images above, it can be seen that I drove the robot toward the wall with a fixed PWM input (130), and recorded both the ToF distance and estimated speed. Using this data, I plotted raw distance and computed speed over time. I then estimated:</p>
+                    <ul>
+                    <li><strong>Steady-state speed (v<sub>ss</sub>)</strong>: ~2509 mm/s</li>
+                    <li><strong>Normalized input (u)</strong>: 130 / 255</li>
+                    <li><strong>Drag (d)</strong> and <strong>momentum (m)</strong>: Calculated using exponential model and 90% rise time</li>
+                    </ul>
+                    <p>The data was saved locally in array format for further analysis.</p>
+        
+                    <!-- 图 1 -->
+                    <div class="container my-4">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-8">
+                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                            <img src="assets/img/lab7/imag1.png" alt="Step response data" class="img-fluid rounded" style="width: 100%; height: auto;">
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <p>The speed curve shows a downward trend because when the current distance is less than 100, I reverse the car’s motor at a speed of 255 to protect it instead of letting it crash into the wall.</p>
+
+                    <hr class="my-4"/>
+                    <h2 class="text-center mb-4">Step2: System Parameter Estimation</h2>
+
+                    <p>In this section, I walk through how I calculated the drag coefficient <strong>d</strong> and mass-like parameter <strong>m</strong> based on the data I showed on the <strong>Step 1.</strong> </p>
+
+                    <h4>Units</h4>
+                    <ul>
+                    <li>Time: μs (microseconds)</li>
+                    <li>Speed: mm/s</li>
+                    <li>ToF Distance: mm</li>
+                    </ul>
+
+                    <h4>Max Speed Point:</h4>
+                    <p><code>Time = 1870261.0 μs</code>, <code>Speed = 2509.0 mm/s</code> → steady-state speed <strong>v<sub>ss</sub> = 2509.0 mm/s</strong></p>
+
+                    <h4>1: Calculate 90% of Steady-State Speed</h4>
+                    <pre><code>v₀.₉ = 0.9 × 2509.0 = <strong>2258.1 mm/s</strong></code></pre>
+
+                    <h4>2: Find when speed crosses 2258.1 mm/s</h4>
+                    <table class="table table-bordered w-75 mx-auto text-center">
+                    <thead class="table-light">
+                        <tr><th>Time (μs)</th><th>Speed (mm/s)</th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1869949.0</td><td>2192.0</td><td>❌ Below</td></tr>
+                        <tr><td>1870053.0</td><td>2278.0</td><td>✅ Above</td></tr>
+                    </tbody>
+                    </table>
+                    <p>So <code>v = 2258.1</code> is between these two timestamps.</p>
+
+                    <h4>3: Linear Interpolation for t₀.₉</h4>
+                    <pre><code>
+                    t₁ = 1869949.0 μs, v₁ = 2192.0
+                    t₂ = 1870053.0 μs, v₂ = 2278.0
+
+                    Δv = 2278.0 − 2192.0 = 86.0
+                    Δt = 104.0 μs
+                    v_diff = 2258.1 − 2192.0 = 66.1
+
+                    t₀.₉ = t₁ + (v_diff / Δv) × Δt
+                        ≈ 1869949.0 + (66.1 / 86.0) × 104.0
+                        ≈ <strong>1870029.0 μs</strong>
+                    </code></pre>
+
+                    <h4>4: Compute Rise Time to 90%</h4>
+                    <pre><code>
+                    Start time = 1869013.0 μs
+
+                    t₀.₉ − t_start = 1870029.0 − 1869013.0 = 1016.0 μs = <strong>0.001016 s</strong>
+                    </code></pre>
+
+                    <h4>5: Compute d and m</h4>
+
+                    <pre><code>
+                    Input PWM = 130 → u = 130 / 255 ≈ 0.5098
+
+                    From u = d ⋅ v_ss  ⇒  d = u / v_ss = 0.5098 / 2509.0 ≈ <strong>0.0002031</strong> (1/s)
+
+                    m = −d ⋅ t₀.₉ / ln(0.1)
+                    = −0.0002031 × 0.001016 / (−2.3026)
+                    ≈ <strong>8.96 × 10⁻⁸</strong>
+                    </code></pre>
+
+                    <p>These parameters were then used to construct my state-space model and discretize the Kalman Filter matrices.</p>
+                    <p>Below is how I implemented the above process using Python code.</p>
+                    <div class="container my-4">
+                        <div class="row g-4 justify-content-center">
+                          <div class="col-md-8">
+                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                              <img src="assets/img/lab7/caculate python.png" 
+                                   alt="Kalman Filter Estimated vs Raw TOF (Position only)" 
+                                   class="img-fluid rounded" 
+                                   style="width: 100%; height: auto;">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+        
+                    <hr class="my-4"/>
+                    <h2>Step 3: Implement and Test Kalman Filter in Python</h2>
+                    
+                    <p>
+                    To verify the effectiveness of the Kalman Filter, I implemented a 1D position-only Kalman Filter in Python using my raw ToF data collected in the step response test.
+                    </p>
+                    
+                    <h4>State Space Model</h4>
+                    <p>My state vector was simply:</p>
+                    <pre><code>
+                    x = [position]
+                    A = [[1]]
+                    B = [[Δt]]
+                    C = [[1]]
+                    </code></pre>
+                    <p>
+                    The input <code>u</code> was the normalized PWM value (130 / 255), and the observation <code>y</code> was the raw ToF measurement. The model assumes constant velocity during each small time step Δt.
+                    </p>
+                    
+                    <h4>Noise Covariance Matrices</h4>
+                    <p>
+                    I empirically set the process and sensor noise as:
+                    </p>
+                    <pre><code>
+                    Process noise variance (σ₁²) = 10² = 100
+                    Sensor noise variance (σ₂²) = 20² = 400
+                    
+                    Sigma_u = [[100]]
+                    Sigma_z = [[400]]
+                    </code></pre>
+                    
+                    <h4>Filtering Loop</h4>
+                    <p>
+                    For every ToF measurement, I called the Kalman Filter update function:
+                    </p>
+                    <pre><code>
+                    for each time step i:
+                        y = observed ToF at time i
+                        u = constant normalized PWM
+                        mu, sigma = kf(mu, sigma, u, y)
+                    </code></pre>
+                    <p>
+                    This produced a smoother estimate of the true position at each time step, as shown below.
+                    </p>
+                    
+                    <!-- 图像占位：KF vs Raw (Position Only) -->
+                    <div class="container my-4">
+                      <div class="row g-4 justify-content-center">
+                        <div class="col-md-8">
+                          <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                            <img src="assets/img/lab7/img_kf_position.png" 
+                                 alt="Kalman Filter Estimated vs Raw TOF (Position only)" 
+                                 class="img-fluid rounded" 
+                                 style="width: 100%; height: auto;">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p>Below is the code implementation of the above description.</p>
+                    <div class="container my-4">
+                        <div class="row g-4 justify-content-center">
+                          <div class="col-md-8">
+                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                              <img src="assets/img/lab7/KFpython.png" 
+                                   alt="Kalman Filter Estimated vs Raw TOF (Position only)" 
+                                   class="img-fluid rounded" 
+                                   style="width: 100%; height: auto;">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    
+                    <h4>Observation</h4>
+                    <ul>
+                      <li>The Kalman Filter output showed a much smoother, physically consistent trajectory.</li>
+                      <li>This gives the PID controller a better input signal for distance regulation.</li>
+                      <li>Although there is some discrepancy between the raw TOF data and the Kalman filter output data, I believe it is acceptable.</li>
+
+                    </ul>
+                    
+                    
+        
+                    <hr class="my-4"/>
+                    <h2>Step 4: Implement Kalman Filter on Artemis</h2>
+                    <p>
+                        First, I followed the content from the tutorial section 
+                        <em>"4. Implement the Kalman Filter on the Robot"</em> 
+                        (<a href="https://fastrobotscornell.github.io/FastRobots-2025/labs/Lab7.html" target="_blank">https://fastrobotscornell.github.io/FastRobots-2025/labs/Lab7.html</a>) 
+                        and Step 3: <em>"Implement and Test Kalman Filter in Python"</em> in my report to import the BLA library and related parameters.
+                      </p>
+                      <div class="container my-4">
+                        <div class="row g-4 justify-content-center">
+                            <div class="col-md-8">
+                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                <img src="assets/img/lab7/import.png" alt="KF integrated with PID" class="img-fluid rounded" style="width: 100%; height: auto;">
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <p>
+                            Then, I implemented a Kalman filter using the <code>kalman_update</code> function to make the TOF data smoother. 
+                            I also modified the code in the <code>PID_control()</code> function from Lab 5: 
+                            after reading the sensor data, I use the <code>kalman_update</code> function to obtain the filtered distance, 
+                            and I use this filtered distance to calculate the error instead of the original <code>current_distance</code>.
+                          </p>
+                          <div class="container my-4">
+                            <div class="row g-4 justify-content-center">
+                                <div class="col-md-8">
+                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                    <img src="assets/img/lab7/gai.png" alt="KF integrated with PID" class="img-fluid rounded" style="width: 100%; height: auto;">
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab7/kalman.png" alt="KF integrated with PID" class="img-fluid rounded" style="width: 100%; height: auto;">
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            <p>Finally, I still used the best PID values obtained from Lab 5, namely Kp: 0.1, Ki: 0.0001, and Kd: 25, and let the car try to stop at a distance of 104 mm from the wall (which is very close—I wanted to see how well the Kalman Filter performs).</p>
+                            <p>The result is visualized in the figure below.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <img src="assets/img/lab7/result.png" alt="KF integrated with PID" class="img-fluid rounded" style="width: 100%; height: auto;">
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <p>
+                                    As shown clearly in the figure, the data after applying the Kalman filter is very smooth, indicating a successful experiment.
+                                  </p>
+                                  
+                    <p>Below is the video of my robot successfully stopping 104mm from the wall using Kalman-filtered ToF values as input to the PID controller:</p>
+        
+                    <!-- 视频区域 -->
+                    <div class="mx-auto" style="max-width: 600px;">
+                    <div class="ratio ratio-16x9 mb-3">
+                        <iframe src="https://www.youtube.com/embed/Evz-5G_1IVQ" title="Kalman Filter Robot Demo" allowfullscreen></iframe>
+                    </div>
+                    </div>
+        
+                    <hr class="my-4"/>
+                    <h2>Summary</h2>
+                    <p>In this lab, I successfully implemented and validated a 2D Kalman Filter for ToF sensor fusion. I integrated it with PID control on the robot and demonstrated smoother, faster, and more accurate behavior compared to raw measurements alone.</p>
+                    <p>The Kalman Filter significantly improved the stability of distance estimates, which in turn allowed my robot to approach the wall faster while still braking safely. Compared to raw ToF readings, the filtered values were less noisy and better matched the expected trajectory.</p>
+                </div>
+                </div>
+        
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                </div>
+        
+            </div>
+            </div>
+        </div>
+  
+        
 
         <!-- 使用Bootstrap 5.x为例 -->
         <div class="modal fade" id="labModal" tabindex="-1" aria-labelledby="lab1ModalLabel" aria-hidden="true">
