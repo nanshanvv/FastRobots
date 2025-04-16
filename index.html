@@ -188,11 +188,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab1Modal">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab9Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic9.jpeg" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">Lab 9</div>
+                                <div class="project-name">Mapping</div>
                             </div>
                         </a>
                     </div>
@@ -3486,356 +3486,733 @@ if (ui32LoudestFrequency >= 524 && ui32LoudestFrequency <= 527)
             </div>
         </div>
                     <!-- Lab 8 Modal -->
-                    <div class="modal fade" id="lab8Modal" tabindex="-1" aria-labelledby="lab8ModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-xl modal-dialog-centered">
-                            <div class="modal-content border-0 shadow">
-                                <div class="modal-header bg-light">
-                                    <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 8: Task B - Drift</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                    
-                                <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
-                                    <div class="container-fluid">
-                                        <h2 class="text-center mb-4">Lab 8 Stunts! Task B - Drift</h2>
-                    
-                                        <h2>Task Description</h2>
-                                        <p>The robot must start at the designated line (< 4m from the wall), drive forward at high speed, and initiate a 180° turn when within 3ft (914mm) of the wall. Successful execution requires fast reaction, stable turning, and accurate distance sensing. The challenge includes implementing precise timing for the drift maneuver while optionally using Kalman Filter predictions during sensor gaps.</p>
-                    
-                                        <h2>System Components</h2>
-                                        <ul>
-                                            <li>Artemis board</li>
-                                            <li>VL53L1X ToF sensor</li>
-                                            <li>ICM20948 IMU</li>
-                                            <li>DC Motors (controlled via PWM)</li>
-                                            <li>BLE module</li>
-                                            <li>Kalman Filter & PID Controller</li>
-                                        </ul>
-                                        <hr class="my-4"/>
-                                        <h2>System Design: State Machine</h2>
-                                        <p>The robot operates under a state machine with the following states:</p>
-                                        <ol>
-                                            <li><code>STATE_FORWARD</code>: The robot moves forward at high speed.</li>
-                                            <li><code>STATE_TURNING_AT_X</code>: Upon reaching a target distance, the robot performs a 180° turn.</li>
-                                            <li><code>STATE_STOPPED</code>: The robot stops after completing the round trip.</li>
-                                        </ol>
-                                        <!-- 图片区容器 -->                       
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/system.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p>The following is a screenshot of the code I implemented for state machine transitions. This code is located in the program's <code>loop</code> function.</p>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/stateschange.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/states.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p>Note: In the code, I also defined <code>state_backward</code>, but in reality, it calls the same function as <code>state_forward</code>. Therefore, in the initial state transition diagram, I represented both as Forward States. This design allows for better distinction between the pre-turn and post-turn states, making debugging more convenient.</p>
-                                
-
-                                        <hr class="my-4"/>
-                                        <h2>Arduino Data Reception Format</h2>
-                                        <p>In this experiment, the Arduino will receive 7 parameters from the Python side. These are:<br>
-                                        ToF Sensor PID parameters: <code>Kp_tof</code>, <code>Ki_tof</code>, <code>Kd_tof</code><br>
-                                        IMU Sensor PID parameters: <code>Kp_imu</code>, <code>Ki_imu</code>, <code>Kd_imu</code><br>
-                                        Target distance: <code>target_distance</code>
-                                        </p>
-                                        <p>The following is a screenshot of the code</p>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/inputvalue.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                            
-                                        <hr class="my-4"/>
-                                        <h2>ToF Module and IMU Module</h2>
-                                        <p>In this experiment, the ToF module and IMU module are based on <a href="https://nanshanvv.github.io/FastRobots/">Lab 7: Kalman Filter</a> and <a href="https://nanshanvv.github.io/FastRobots/">Lab 6: Orientation Control</a>, respectively (URLs to be inserted). For detailed code information, please refer to these two lab reports.</p>
-                                        <p>The following are partial code screenshots.</p>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/1.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/2.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/3.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <p>It is important to note that the ToF sensor, IMU, and Artemis Board loop all operate at different frequencies. Therefore, it is necessary to add <code>delay()</code> functions to certain data transmission segments to appropriately reduce their frequency and ensure accurate data communication.</p>
-                                        
-                                        <p>Additionally, during the experiment, I encountered two issues: invalid initial sensor readings and IMU data drift. The following two sections explain how I addressed these problems.</p>
-                                        
-                                       
-                                        <hr class="my-4"/>
-                                        <h2>ToF Initialization Issue and Fix</h2>
-                                        <p>During the experiment, I noticed that many times the car would directly enter the 180 degree turning state, skipping the initial forward state. This behavior is shown in the video below.</p>
-                                        <div class="mx-auto" style="max-width: 600px;">
-                                            <div class="ratio ratio-16x9 mb-3">
-                                                <iframe
-                                                    src="https://www.youtube.com/embed/omF8Kr02fg0"
-                                                    title="Funny Drift Bot"
-                                                    allowfullscreen>
-                                                </iframe>
-                                            </div>
-                                        </div>
-                                        <p>I checked the sensor data and found that the first 20 readings were extremely low (around 0–200), which caused the car to mistakenly believe it had already reached the target distance and immediately triggered the second state machine (180-degree rotation).</p>
-
-                                        <p>I believe this issue occurred because the sensor requires some time to initialize after calling <code>distanceSensor.startRanging();</code> before it can produce accurate values. To address this, I added the following code in the <code>pid_control()</code> function of the ToF module:</p>
-                                        
-<pre><code>if (skip_counter &lt; 25) {
-    skip_counter++;
-    return;  
-}</code></pre>
-                                        
-                                        <p>These few lines of code successfully resolved the problem.</p>
-                                        
-
-
-                                        
-                                        <hr class="my-4"/>
-                                        <h2>Code Execution and PID Tuning</h2>
-                                        <p>I reused the PID values obtained from Lab 6 and Lab 7 for the experiment.</p>
-
-                                        <p><strong>Experiment 1:</strong><br>
-                                        The input data I used is shown in the image below.</p>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/input1.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p><strong>Experimental Result:</strong><br></p>
-                                            <div class="mx-auto" style="max-width: 600px;">
-                                                <div class="ratio ratio-16x9 mb-3">
-                                                    <iframe
-                                                        src="https://www.youtube.com/embed/8qBpHmHOO7c"
-                                                        title="Funny Drift Bot"
-                                                        allowfullscreen>
-                                                    </iframe>
-                                                </div>
-                                            </div>
-
-                                        <p>I observed that the car's IMU caused it to keep rotating without stopping, indicating a drift issue in the sensor data. To address this, I added the following code at the beginning of the IMU PID control logic:</p>
-                                        <div class="container my-4">
-                                            <!-- 图片区容器 -->
-                                            <div class="row g-4 justify-content-center">
-                                                <!-- 让列占满全宽 -->
-                                                <div class="col-md-8">
-                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                    <!-- 去掉 max-height，改为 width: 100% -->
-                                                    <img src="assets/img/lab8/IMU.png" 
-                                                        alt="Artemis and IMU" 
-                                                        class="img-fluid rounded" 
-                                                        style="width: 100%; height: auto; object-fit: contain;">
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p>With this piece of code, I performed initial bias calibration on the gyroscope's Z-axis (Yaw direction), which effectively prevented data drift.</p>
-
-                                        
-                                        <p><strong>Experiment 2:</strong><br>
-                                            The input data I used is shown in the image below.</p>
-                                            <div class="container my-4">
-                                                <!-- 图片区容器 -->
-                                                <div class="row g-4 justify-content-center">
-                                                    <!-- 让列占满全宽 -->
-                                                    <div class="col-md-8">
-                                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                        <!-- 去掉 max-height，改为 width: 100% -->
-                                                        <img src="assets/img/lab8/input2.png" 
-                                                            alt="Artemis and IMU" 
-                                                            class="img-fluid rounded" 
-                                                            style="width: 100%; height: auto; object-fit: contain;">
-                                                    </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <p><strong>Experimental Result:</strong></p>
-                                            <div class="mx-auto" style="max-width: 600px;">
-                                                <div class="ratio ratio-16x9 mb-3">
-                                                    <iframe
-                                                        src="https://www.youtube.com/embed/V0NmnczGdlM"
-                                                        title="Funny Drift Bot"
-                                                        allowfullscreen>
-                                                    </iframe>
-                                                </div>
-                                            </div>
-
-                                            
-                                            <p>As shown in the video above, the car rotated several times after reaching the target position before returning, which basically achieved the goal of the experiment. However, the fact that it took many rotations to stabilize in the 180-degree direction indicates that the <code>Kp</code> value was too high and the <code>Kd</code> value was too low. Therefore, I adjusted the parameters <code>Kp_imu</code> and <code>Kd_imu</code> accordingly.</p>
-                                            
-                                            <p><strong>Experiment 3:</strong><br>
-                                                The input data I used is shown in the image below.</p>
-                                                <div class="container my-4">
-                                                    <!-- 图片区容器 -->
-                                                    <div class="row g-4 justify-content-center">
-                                                        <!-- 让列占满全宽 -->
-                                                        <div class="col-md-8">
-                                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                            <!-- 去掉 max-height，改为 width: 100% -->
-                                                            <img src="assets/img/lab8/input3.png" 
-                                                                alt="Artemis and IMU" 
-                                                                class="img-fluid rounded" 
-                                                                style="width: 100%; height: auto; object-fit: contain;">
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <p><strong>Experimental Result:</strong></p>
-                                                <div class="mx-auto" style="max-width: 600px;">
-                                                    <div class="ratio ratio-16x9 mb-3">
-                                                        <iframe
-                                                            src="https://www.youtube.com/embed/7CtesUoaLLw"
-                                                            title="Funny Drift Bot"
-                                                            allowfullscreen>
-                                                        </iframe>
-                                                    </div>
-                                                </div>
-
-                                                <p>As shown in the video above, the car rotated 180 degrees and returned after reaching the target position, successfully achieving the goal of this experiment.</p>
-                                                <p>The following are the sensor data.</p>
-                                                <div class="container my-4">
-                                                    <!-- 图片区容器 -->
-                                                    <div class="row g-4 justify-content-center">
-                                                        <!-- 让列占满全宽 -->
-                                                        <div class="col-md-8">
-                                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
-                                                            <!-- 去掉 max-height，改为 width: 100% -->
-                                                            <img src="assets/img/lab8/sensor.png" 
-                                                                alt="Artemis and IMU" 
-                                                                class="img-fluid rounded" 
-                                                                style="width: 100%; height: auto; object-fit: contain;">
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <p>It can be seen that the sensor data is very smooth thanks to the Kalman filter. </p>
-                                                <p>In the graph, the sensor data suddenly jumps from 400 to 1600 (timestamp: 96500 to 101000) because during this period the car is in the 180-degree rotation state, during which no sensor data is returned. After the rotation is complete and the system enters the next state, new sensor data is received around timestamp 101000. Since Python automatically connects data points in the plot, a straight line appears between timestamps 96500 and 101000.</p>
-
-                                        
-                                        <hr class="my-4"/>
-                                        <h2>Funniest Moment – Dancing a Waltz with My Robot Car</h2>
-                                        <p>During one of the tests, incorrect PID tuning and yaw drift caused the robot to spin endlessly.<br>
-                                            Interestingly, the robot started spinning along with me, as if we were dancing a waltz together. It was so much fun!</p>
-                                        <p>I quickly took out my phone to record the moment — it was definitely the most entertaining part of the entire experiment.</p>
-                                        <p>The background music in the video is <strong><em>Chopin's Waltz Op. 64 No. 3 in F major</em></strong> — one of my favorite piano pieces. I hope you enjoy it too.</p>
-
-
-                                            
-                                        <div class="mx-auto" style="max-width: 600px;">
-                                            <div class="ratio ratio-16x9 mb-3">
-                                                <iframe
-                                                    src="https://www.youtube.com/embed/vtlNMNFgbq8"
-                                                    title="Funny Drift Bot"
-                                                    allowfullscreen>
-                                                </iframe>
-                                            </div>
-                                        </div>
-                                        
-                                        <hr class="my-4"/>
-                                        <h2>Conclusion</h2>
-                                        <p>This lab integrates BLE communication, Kalman filtering, state machines, and PID control into a full pipeline for fast and autonomous maneuvering. The robot successfully detects the wall, performs a 180° turn using IMU yaw control, and returns to the origin. The implementation strengthened my understanding of sensor fusion and real-time embedded control.</p>
-                    
+        <div class="modal fade" id="lab8Modal" tabindex="-1" aria-labelledby="lab8ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 8: Task B - Drift</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+        
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="container-fluid">
+                            <h2 class="text-center mb-4">Lab 8 Stunts! Task B - Drift</h2>
+        
+                            <h2>Task Description</h2>
+                            <p>The robot must start at the designated line (< 4m from the wall), drive forward at high speed, and initiate a 180° turn when within 3ft (914mm) of the wall. Successful execution requires fast reaction, stable turning, and accurate distance sensing. The challenge includes implementing precise timing for the drift maneuver while optionally using Kalman Filter predictions during sensor gaps.</p>
+        
+                            <h2>System Components</h2>
+                            <ul>
+                                <li>Artemis board</li>
+                                <li>VL53L1X ToF sensor</li>
+                                <li>ICM20948 IMU</li>
+                                <li>DC Motors (controlled via PWM)</li>
+                                <li>BLE module</li>
+                                <li>Kalman Filter & PID Controller</li>
+                            </ul>
+                            <hr class="my-4"/>
+                            <h2>System Design: State Machine</h2>
+                            <p>The robot operates under a state machine with the following states:</p>
+                            <ol>
+                                <li><code>STATE_FORWARD</code>: The robot moves forward at high speed.</li>
+                                <li><code>STATE_TURNING_AT_X</code>: Upon reaching a target distance, the robot performs a 180° turn.</li>
+                                <li><code>STATE_STOPPED</code>: The robot stops after completing the round trip.</li>
+                            </ol>
+                            <!-- 图片区容器 -->                       
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/system.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                            </div>
+                            <p>The following is a screenshot of the code I implemented for state machine transitions. This code is located in the program's <code>loop</code> function.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/stateschange.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/states.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>Note: In the code, I also defined <code>state_backward</code>, but in reality, it calls the same function as <code>state_forward</code>. Therefore, in the initial state transition diagram, I represented both as Forward States. This design allows for better distinction between the pre-turn and post-turn states, making debugging more convenient.</p>
+                    
+
+                            <hr class="my-4"/>
+                            <h2>Arduino Data Reception Format</h2>
+                            <p>In this experiment, the Arduino will receive 7 parameters from the Python side. These are:<br>
+                            ToF Sensor PID parameters: <code>Kp_tof</code>, <code>Ki_tof</code>, <code>Kd_tof</code><br>
+                            IMU Sensor PID parameters: <code>Kp_imu</code>, <code>Ki_imu</code>, <code>Kd_imu</code><br>
+                            Target distance: <code>target_distance</code>
+                            </p>
+                            <p>The following is a screenshot of the code</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/inputvalue.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                                
+                            <hr class="my-4"/>
+                            <h2>ToF Module and IMU Module</h2>
+                            <p>In this experiment, the ToF module and IMU module are based on <a href="https://nanshanvv.github.io/FastRobots/">Lab 7: Kalman Filter</a> and <a href="https://nanshanvv.github.io/FastRobots/">Lab 6: Orientation Control</a>, respectively (URLs to be inserted). For detailed code information, please refer to these two lab reports.</p>
+                            <p>The following are partial code screenshots.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/2.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/3.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>It is important to note that the ToF sensor, IMU, and Artemis Board loop all operate at different frequencies. Therefore, it is necessary to add <code>delay()</code> functions to certain data transmission segments to appropriately reduce their frequency and ensure accurate data communication.</p>
+                            
+                            <p>Additionally, during the experiment, I encountered two issues: invalid initial sensor readings and IMU data drift. The following two sections explain how I addressed these problems.</p>
+                            
+                            
+                            <hr class="my-4"/>
+                            <h2>ToF Initialization Issue and Fix</h2>
+                            <p>During the experiment, I noticed that many times the car would directly enter the 180 degree turning state, skipping the initial forward state. This behavior is shown in the video below.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/omF8Kr02fg0"
+                                        title="Funny Drift Bot"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>I checked the sensor data and found that the first 20 readings were extremely low (around 0–200), which caused the car to mistakenly believe it had already reached the target distance and immediately triggered the second state machine (180-degree rotation).</p>
+
+                            <p>I believe this issue occurred because the sensor requires some time to initialize after calling <code>distanceSensor.startRanging();</code> before it can produce accurate values. To address this, I added the following code in the <code>pid_control()</code> function of the ToF module:</p>
+                            
+<pre><code>if (skip_counter &lt; 25) {
+skip_counter++;
+return;  
+}</code></pre>
+                            
+                            <p>These few lines of code successfully resolved the problem.</p>
+                            
+
+
+                            
+                            <hr class="my-4"/>
+                            <h2>Code Execution and PID Tuning</h2>
+                            <p>I reused the PID values obtained from Lab 6 and Lab 7 for the experiment.</p>
+
+                            <p><strong>Experiment 1:</strong><br>
+                            The input data I used is shown in the image below.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/input1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><strong>Experimental Result:</strong><br></p>
+                                <div class="mx-auto" style="max-width: 600px;">
+                                    <div class="ratio ratio-16x9 mb-3">
+                                        <iframe
+                                            src="https://www.youtube.com/embed/8qBpHmHOO7c"
+                                            title="Funny Drift Bot"
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+
+                            <p>I observed that the car's IMU caused it to keep rotating without stopping, indicating a drift issue in the sensor data. To address this, I added the following code at the beginning of the IMU PID control logic:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab8/IMU.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>With this piece of code, I performed initial bias calibration on the gyroscope's Z-axis (Yaw direction), which effectively prevented data drift.</p>
+
+                            
+                            <p><strong>Experiment 2:</strong><br>
+                                The input data I used is shown in the image below.</p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                        <!-- 让列占满全宽 -->
+                                        <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <!-- 去掉 max-height，改为 width: 100% -->
+                                            <img src="assets/img/lab8/input2.png" 
+                                                alt="Artemis and IMU" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><strong>Experimental Result:</strong></p>
+                                <div class="mx-auto" style="max-width: 600px;">
+                                    <div class="ratio ratio-16x9 mb-3">
+                                        <iframe
+                                            src="https://www.youtube.com/embed/V0NmnczGdlM"
+                                            title="Funny Drift Bot"
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+
+                                
+                                <p>As shown in the video above, the car rotated several times after reaching the target position before returning, which basically achieved the goal of the experiment. However, the fact that it took many rotations to stabilize in the 180-degree direction indicates that the <code>Kp</code> value was too high and the <code>Kd</code> value was too low. Therefore, I adjusted the parameters <code>Kp_imu</code> and <code>Kd_imu</code> accordingly.</p>
+                                
+                                <p><strong>Experiment 3:</strong><br>
+                                    The input data I used is shown in the image below.</p>
+                                    <div class="container my-4">
+                                        <!-- 图片区容器 -->
+                                        <div class="row g-4 justify-content-center">
+                                            <!-- 让列占满全宽 -->
+                                            <div class="col-md-8">
+                                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <!-- 去掉 max-height，改为 width: 100% -->
+                                                <img src="assets/img/lab8/input3.png" 
+                                                    alt="Artemis and IMU" 
+                                                    class="img-fluid rounded" 
+                                                    style="width: 100%; height: auto; object-fit: contain;">
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p><strong>Experimental Result:</strong></p>
+                                    <div class="mx-auto" style="max-width: 600px;">
+                                        <div class="ratio ratio-16x9 mb-3">
+                                            <iframe
+                                                src="https://www.youtube.com/embed/7CtesUoaLLw"
+                                                title="Funny Drift Bot"
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+
+                                    <p>As shown in the video above, the car rotated 180 degrees and returned after reaching the target position, successfully achieving the goal of this experiment.</p>
+                                    <p>The following are the sensor data.</p>
+                                    <div class="container my-4">
+                                        <!-- 图片区容器 -->
+                                        <div class="row g-4 justify-content-center">
+                                            <!-- 让列占满全宽 -->
+                                            <div class="col-md-8">
+                                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <!-- 去掉 max-height，改为 width: 100% -->
+                                                <img src="assets/img/lab8/sensor.png" 
+                                                    alt="Artemis and IMU" 
+                                                    class="img-fluid rounded" 
+                                                    style="width: 100%; height: auto; object-fit: contain;">
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>It can be seen that the sensor data is very smooth thanks to the Kalman filter. </p>
+                                    <p>In the graph, the sensor data suddenly jumps from 400 to 1600 (timestamp: 96500 to 101000) because during this period the car is in the 180-degree rotation state, during which no sensor data is returned. After the rotation is complete and the system enters the next state, new sensor data is received around timestamp 101000. Since Python automatically connects data points in the plot, a straight line appears between timestamps 96500 and 101000.</p>
+
+                            
+                            <hr class="my-4"/>
+                            <h2>Funniest Moment – Dancing a Waltz with My Robot Car</h2>
+                            <p>During one of the tests, incorrect PID tuning and yaw drift caused the robot to spin endlessly.<br>
+                                Interestingly, the robot started spinning along with me, as if we were dancing a waltz together. It was so much fun!</p>
+                            <p>I quickly took out my phone to record the moment — it was definitely the most entertaining part of the entire experiment.</p>
+                            <p>The background music in the video is <strong><em>Chopin's Waltz Op. 64 No. 3 in F major</em></strong> — one of my favorite piano pieces. I hope you enjoy it too.</p>
+
+
+                                
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/vtlNMNFgbq8"
+                                        title="Funny Drift Bot"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4"/>
+                            <h2>Conclusion</h2>
+                            <p>This lab integrates BLE communication, Kalman filtering, state machines, and PID control into a full pipeline for fast and autonomous maneuvering. The robot successfully detects the wall, performs a 180° turn using IMU yaw control, and returns to the origin. The implementation strengthened my understanding of sensor fusion and real-time embedded control.</p>
+        
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    <!-- Lab 9 Modal -->
+        <div class="modal fade" id="lab9Modal" tabindex="-1" aria-labelledby="lab9ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 9 Mapping</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+        
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="container-fluid">
+                            <h2 class="text-center mb-4">Lab 9 Mapping</h2>
+        
+                            <h2>Objective</h2>
+                            <p>
+                              The goal of this lab is to create a 2D map of a static environment—specifically, the front room of the lab—which will be used in later localization and navigation tasks.
+                              To construct the map, the robot is placed at several pre-defined positions and performs a 360-degree rotation at each one, collecting Time-of-Flight (ToF) sensor readings throughout the turn.
+                            </p>
+                            
+                            <h2>Method</h2>
+                            <p>
+                              To ensure accurate and evenly distributed measurements in angular space, I implemented PID control on orientation, using integrated gyroscope data (via the DMP module) to maintain and adjust heading.
+                              This closed-loop control method allowed for consistent angular speed and precise yaw estimation throughout the rotation.
+                              At each time step, the robot recorded multiple ToF distance measurements at different angles relative to its position.
+                            </p>
+                            
+                            <h2>System Components</h2>
+                            <ul>
+                                <li>1 × Fully assembled robot, with Artemis, TOF sensors, and an IMU.</li>
+                              </ul>
+                              
+                            <hr class="my-4"/>
+                            <h2>Robot Control: Mapping Function Using Orientation PID Control</h2>
+                            <p>
+                                In Lab 6, I implemented orientation PID control using DMP values, which allowed the robot to rotate to a specified angle and stabilize. 
+                                Therefore, I decided to reuse the functionality already developed in Lab 6 to implement the mapping function.
+                                Below is the key code for my mapping function.
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                        <!-- 让列占满全宽 -->
+                                        <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <!-- 去掉 max-height，改为 width: 100% -->
+                                            <img src="assets/img/lab9/command.png" 
+                                                alt="Artemis and IMU" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div> 
+
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab9/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab9/2.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>
+                                Through the <code>start_mapping</code> function, I set two flags—<code>mapping_mode</code> and <code>pid_imu_active</code>—to <code>true</code>, enabling the mapping operation to run inside the main loop.
+                                </p>
+                                
+                                <p>
+                                For orientation PID control, I used the <code>pid_control_IMU</code> function. The detailed implementation and its underlying principles can be found in my Lab 6 report.
+                                </p>
+                                
+                                <p>
+                                In Lab 9, my main approach was to increment a global variable <code>target_yaw</code> by a fixed angle <code>step_angle</code> after each step, allowing <code>pid_control_IMU</code> to determine the desired yaw for each step. I considered the mapping complete when <code>current_step &gt; step_total</code>, indicating the robot had completed a full rotation.
+                                </p>
+                                
+                                <p>
+                                Key parameters used:
+                                <ul>
+                                  <li><strong>step_angle = 24°</strong></li>
+                                  <li><strong>step_total = 15 steps</strong></li>
+                                </ul>
+                                </p>
+                                
+                                <p>
+                                In Lab 9, I will mainly present the following aspects:
+                                <ol>
+                                  <li>Synchronizing the main loop frequency with the DMP value update rate</li>
+                                  <li>Overcoming static friction</li>
+                                </ol>
+                                </p>
+                                
+                                
+                                <h3>Synchronizing the main loop frequency with the DMP value update rate</h3>
+                                <p>
+                                    During testing, I found that the IMU readings contained a lot of noise, such as <strong>NaN</strong> values and <strong>0</strong> values. I believe this issue was caused by the <strong>IMU data update rate being slower than the main loop rate</strong>. 
+                                    To address this problem, I needed to <strong>synchronize the IMU update rate with the main loop rate</strong>.
+                                    </p>
+                                    <div class="container my-4">
+                                        <!-- 图片区容器 -->
+                                        <div class="row g-4 justify-content-center">
+                                            <!-- 让列占满全宽 -->
+                                            <div class="col-md-8">
+                                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <!-- 去掉 max-height，改为 width: 100% -->
+                                                <img src="assets/img/lab9/dmp.png" 
+                                                    alt="Artemis and IMU" 
+                                                    class="img-fluid rounded" 
+                                                    style="width: 100%; height: auto; object-fit: contain;">
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        From the comments in the existing code, I found that the current DMP frequency is <strong>27.5 Hz</strong>. 
+                                        To make the main loop slightly slower than the DMP update rate and thus reduce the occurrence of <strong>NaN</strong> and <strong>0</strong> values, 
+                                        I added the following code to the main loop:
+                                        </p>
+                                        <div class="container my-4">
+                                            <!-- 图片区容器 -->
+                                            <div class="row g-4 justify-content-center">
+                                                <!-- 让列占满全宽 -->
+                                                <div class="col-md-8">
+                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                    <!-- 去掉 max-height，改为 width: 100% -->
+                                                    <img src="assets/img/lab9/frequency.png" 
+                                                        alt="Artemis and IMU" 
+                                                        class="img-fluid rounded" 
+                                                        style="width: 100%; height: auto; object-fit: contain;">
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <p>
+                                        As shown in the code, I used the condition <strong>if (now - lastPID &gt;= 40)</strong> to make the mapping operation run every <strong>40 milliseconds</strong>. 
+                                        This means the loop frequency during mapping is approximately <strong>25 Hz</strong>, which is slightly lower than the DMP frequency. 
+                                        As a result, the issue of IMU values being <strong>NaN</strong> or <strong>0</strong> was significantly reduced.
+                                    </p>
+                                
+                                    <h3>Overcoming static friction</h3>
+                                    <p>During the experiment, I observed the following phenomena:</p>
+                                    <div class="mx-auto" style="max-width: 600px;">
+                                        <div class="ratio ratio-16x9 mb-3">
+                                            <iframe
+                                                src="https://www.youtube.com/embed/PwFyvpNLezU"
+                                                title="Funny Drift Bot"
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                    
+                                    <p>
+                                        As shown in the video, when the wheels were wrapped with tape, the robot required a slight push to start rotating. 
+                                        This indicates that the robot could not overcome <strong>static friction</strong> on its own. 
+                                        To address this issue, I added the following code to help the robot overcome the static friction and initiate rotation.
+                                        </p>
+                                        <div class="container my-4">
+                                            <!-- 图片区容器 -->
+                                            <div class="row g-4 justify-content-center">
+                                                <!-- 让列占满全宽 -->
+                                                <div class="col-md-8">
+                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                    <!-- 去掉 max-height，改为 width: 100% -->
+                                                    <img src="assets/img/lab9/friction.png" 
+                                                        alt="Artemis and IMU" 
+                                                        class="img-fluid rounded" 
+                                                        style="width: 100%; height: auto; object-fit: contain;">
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                            <hr class="my-4"/>
+                            <h2>SEND_DATA Function</h2>
+                            <p>
+                                I used the <strong>SEND_DATA</strong> command to receive the current angle along with the five collected <strong>ToF</strong> readings. 
+                                The detailed code and a sample output are shown below:
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                        <!-- 让列占满全宽 -->
+                                        <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <!-- 去掉 max-height，改为 width: 100% -->
+                                            <img src="assets/img/lab9/DataSend.png" 
+                                                alt="Artemis and IMU" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                        <!-- 让列占满全宽 -->
+                                        <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <!-- 去掉 max-height，改为 width: 100% -->
+                                            <img src="assets/img/lab9/Data.png" 
+                                                alt="Artemis and IMU" 
+                                                class="img-fluid rounded" 
+                                                style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <hr class="my-4"/> 
+                            <h2>Mapping Process and Results</h2>
+                            <p>
+                                Within the designated area of the lab, I positioned the robot at four locations: <strong>(-3, -2)</strong>, <strong>(0, 3)</strong>, <strong>(5, 3)</strong>, and <strong>(5, -3)</strong>, 
+                                where it performed a full <strong>360-degree rotation</strong> at each point. 
+                                During the rotation, the robot recorded <strong>five ToF sensor readings</strong> every <strong>24 degrees</strong>.
+                                </p>
+                                
+                                <p>
+                                In this experiment, the PID values that gave the best performance were: 
+                                <strong>Kp = 18</strong>, <strong>Ki = 0.0001</strong>, <strong>Kd = 15</strong>.
+                                </p>
+                                <div class="mx-auto" style="max-width: 600px;">
+                                    <div class="ratio ratio-16x9 mb-3">
+                                        <iframe
+                                            src="https://www.youtube.com/embed/imCDWVN37lg"
+                                            title="Funny Drift Bot"
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+                                <div class="mx-auto" style="max-width: 600px;">
+                                    <div class="ratio ratio-16x9 mb-3">
+                                        <iframe
+                                            src="https://www.youtube.com/embed/g4kR6Pv41hg"
+                                            title="Funny Drift Bot"
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+                                
+                                <p>
+                                    After performing the operation shown in the video at each position, I collected <strong>five ToF readings</strong> at every <strong>24-degree</strong> interval. 
+                                    Using this data, I generated the following <strong>polar plots</strong>.
+                                </p>
+                                <div class="container my-4">
+                                    <!-- 图片区容器 -->
+                                    <div class="row g-4 justify-content-center">
+                                      <!-- 四张图，每行两张，所以每列占6格 -->
+                                      <div class="col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab9/3.png" 
+                                               alt="Image 1" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab9/4.png" 
+                                               alt="Image 2" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab9/5.png" 
+                                               alt="Image 3" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                          <img src="assets/img/lab9/6.png" 
+                                               alt="Image 4" 
+                                               class="img-fluid rounded" 
+                                               style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p>
+                                    Additionally, I used the following code to process the four datasets, <strong>compute the transformation matrices</strong>, 
+                                    and <strong>convert the distance sensor measurements to the inertial reference frame of the room</strong>.
+                                    </p>
+                                    <div class="container my-4">
+                                        <!-- 图片区容器 -->
+                                        <div class="row g-4 justify-content-center">
+                                            <!-- 让列占满全宽 -->
+                                            <div class="col-md-8">
+                                            <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                <!-- 去掉 max-height，改为 width: 100% -->
+                                                <img src="assets/img/lab9/finalcode.png" 
+                                                    alt="Artemis and IMU" 
+                                                    class="img-fluid rounded" 
+                                                    style="width: 100%; height: auto; object-fit: contain;">
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        After plotting the data, I noticed that all the measurements were rotated <strong>30 degrees counterclockwise</strong> in the Cartesian coordinate system. 
+                                        To correct this and make the final data more standardized, I added the following lines to the code:
+                                        </p>
+                                        
+                                        <pre><code>
+                                        rotation_offset_deg = 30
+                                        angle_rad = np.deg2rad(angle_deg + rotation_offset_deg)
+                                        </code></pre>
+                                        <p>The results are shown in the figure below:</p>
+                                        <div class="container my-4">
+                                            <!-- 图片区容器 -->
+                                            <div class="row g-4 justify-content-center">
+                                                <!-- 让列占满全宽 -->
+                                                <div class="col-md-8">
+                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                    <!-- 去掉 max-height，改为 width: 100% -->
+                                                    <img src="assets/img/lab9/final result.png" 
+                                                        alt="Artemis and IMU" 
+                                                        class="img-fluid rounded" 
+                                                        style="width: 100%; height: auto; object-fit: contain;">
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container my-4">
+                                            <!-- 图片区容器 -->
+                                            <div class="row g-4 justify-content-center">
+                                                <!-- 让列占满全宽 -->
+                                                <div class="col-md-8">
+                                                <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                                    <!-- 去掉 max-height，改为 width: 100% -->
+                                                    <img src="assets/img/lab9/final.jpeg" 
+                                                        alt="Artemis and IMU" 
+                                                        class="img-fluid rounded" 
+                                                        style="width: 100%; height: auto; object-fit: contain;">
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  
+                                
+                                    
+
+                            
+                            <hr class="my-4"/>
+                            <h2>Conclusion</h2>
+                            <p>In this lab, I successfully built a 2D map of the lab room by collecting ToF measurements at multiple positions while rotating the robot. I used PID control on orientation with integrated gyroscope data to ensure stable and accurate rotations. This method produced evenly spaced sensor readings, leading to a clean and reliable map for future localization and navigation tasks.</p>
+        
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
                     
         
 
