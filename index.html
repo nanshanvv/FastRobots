@@ -197,11 +197,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab1Modal">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab10Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic10.png" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">Lab 10</div>
+                                <div class="project-name">Grid Localization using Bayes Filter</div>
                             </div>
                         </a>
                     </div>
@@ -4218,7 +4218,341 @@ return;
                 </div>
             </div>
         </div>
-                    
+
+        <!-- Begin Lab 10 HTML Report Embed -->
+        <div class="modal fade" id="lab10Modal" tabindex="-1" aria-labelledby="lab10ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 10 Grid Localization using Bayes Filter</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+        
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="container-fluid">
+                            <h2 class="text-center mb-4">Lab 10: Grid Localization using Bayes Filter</h2>
+  
+                            <h2>Objective</h2>
+                            <p>The objective of this lab was to implement a grid-based Bayes Filter to localize a mobile robot using odometry and sensor readings in a discretized environment.</p>
+                            <hr class="my-4"/>
+                            <h2>Key Concepts</h2>
+                            <ul>
+                              <li>Belief grids (12x9x18) were used to represent probability distributions over robot poses (x, y, theta)</li>
+                              <li>Bayes Filter consists of <strong>prediction</strong> and <strong>update</strong> steps</li>
+                              <li>Odometry motion model was applied using Gaussian noise</li>
+                              <li>Sensor model compared observed vs. expected 18-dimensional range data</li>
+                            </ul>
+                            <hr class="my-4"/>
+                            <h2>Introduction: Bayes Filter</h2>
+                            <p><strong>In robotics, Bayes Filter</strong> is a probabilistic algorithm used for estimating a robot’s position in a known environment by continuously combining two sources of information:</p>
+
+                            <ul>
+                            <li><strong>Control input</strong>: how the robot believes it has moved (from odometry);</li>
+                            <li><strong>Sensor observation</strong>: what the robot sees (from laser range finders).</li>
+                            </ul>
+
+                            <p>At each time step, Bayes Filter performs two essential operations:</p>
+
+                            <ol>
+                            <li><strong>Prediction (or motion update)</strong>: It projects the current belief forward based on how the robot has moved.</li>
+                            <li><strong>Update (or measurement correction)</strong>: It corrects this belief using actual sensor observations.</li>
+                            </ol>
+
+                            <p>The theoretical foundation of the Bayes Filter used in this lab follows the standard formulation presented in Probabilistic Robotics by Thrun, Burgard, and Fox (2005). The prediction and update steps follow::</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>In the class slides, the core pseudocode (algorithm flow) of the Bayes Filter is presented, as shown in the figure below:</p>
+
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/2.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            
+                            <p>This figure is closely related to the functions I need to implement: <code>compute_control</code>, <code>odom_motion_model</code>, <code>prediction_step</code>, <code>sensor_model</code>, and <code>update_step</code>.</p>
+
+                            <p>The following image is a snapshot of my notes, illustrating the connection between the pseudocode and the functions I need to implement.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/3.jpeg" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>     
+                            <p>The following is the implementation code in detail</p>
+
+
+
+
+                            <hr class="my-4"/>
+                            <h2>Function Explanations</h2>
+                          
+                            <h3>compute_control()</h3>
+                            <p>The purpose of this function is to determine <strong>how much the robot has moved</strong> and <strong>how it moved</strong>. It takes the current position and the previous position as input, and calculates the robot's motion as a combination of two rotations and one translation:</p>
+
+                            <ul>
+                              <li><strong>rot1</strong>: the initial rotation to align with the direction of motion,</li>
+                              <li><strong>trans</strong>: the straight-line distance traveled,</li>
+                              <li><strong>rot2</strong>: the final rotation to reach the desired orientation.</li>
+                            </ul>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/4.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <p><strong>Notes:</strong></p>
+                            <ul>
+                            <li>Add a special case check <code>if dx == 0 and dy == 0:</code> to prevent errors from <code>atan2(0, 0)</code>.</li>
+                            <li>Use <code>normalize_angle()</code> to handle angle errors in <code>rot1</code> and <code>rot2</code>, in order to avoid incorrect large angle differences, such as mistaking 360° and 0° as a 360° error.</li>
+                            </ul>
+
+
+                          
+                            <h3>odom_motion_model()</h3>
+                            <p>This function is used to estimate <strong>how likely it is for the robot to move from one position to another</strong>. Given two positions and a control input (the expected motion), it uses a Gaussian distribution to compute the probability of this motion.</p>
+
+                            <p>The assumption is that the robot's rotation and translation are not perfect — for example, it intends to rotate 30°, but ends up rotating only 28°. A Gaussian distribution is well-suited to model this kind of “close but with noise” behavior.</p>
+
+                            <p>I also normalized the angles to avoid mistakes like treating 179° and -181° as a 360° difference, and used <code>max(..., 1e-9)</code> to prevent extremely small probabilities from collapsing the final product to zero.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/5.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>  
+                            <p><strong>Notes:</strong></p>
+                            <ul>
+                            <li>All angle variables <code>rot1</code>, <code>rot2</code>, <code>rot1_hat</code>, and <code>rot2_hat</code> are passed through <code>normalize_angle()</code> to fix large error issues, such as when <code>rot1 ≈ -179°</code> and <code>rot1_hat ≈ +179°</code>.</li>
+                            <li>Gaussian probabilities were previously unbounded below. Now all probabilities <code>p1</code>, <code>p2</code>, and <code>p3</code> are protected using <code>max(..., 1e-9)</code> to avoid zero values, which would cause the entire belief to collapse to zero and result in <code>NaN</code> issues.</li>
+                            </ul>
+
+
+                            <h3>prediction_step()</h3>
+                            <p>This function answers the question: <strong>“Given where I was and how I moved, where am I most likely now?”</strong></p>
+
+                            <p>It loops through all previous states and calculates: if I apply the current control input from that previous state, is it likely that I end up in the current state? If so, it multiplies this likelihood by the belief at the previous time step and adds it to the total.</p>
+
+                            <p>To improve efficiency, I skip previous states with extremely low probabilities (less than <code>0.0001</code>). At the end, I normalize the total so that all probabilities sum up to 1. If, by any chance, the total is zero (e.g., due to a bug or a poor observation), I fall back to a uniform distribution as a safeguard.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/6.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>  
+                            
+                            <h3>sensor_model()</h3>
+                            <p>This function answers the question: <strong>“How similar is the current laser observation at this position to the ideal observation from the map?”</strong></p>
+
+                            <p>The robot rotates in place and scans distances in 18 directions. I compare each observed distance with the expected distance at this position on the map. If the values are close, it suggests that this position is a likely candidate for the robot’s current location.</p>
+
+                            <p>To prevent a single poor match from making the entire probability drop to zero, I added a lower bound safeguard: each individual probability is protected using <code>max(prob, 1e-9)</code>.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/7.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>  
+                            
+                            <h3>update_step()</h3>
+                            <p>This function combines the previous prediction with the current laser observation to update the final <code>belief</code>.</p>
+
+                            <p>For each grid cell, it calculates: <strong>“If the robot were at this location, how likely would it be to receive the current observation?”</strong> This likelihood is then multiplied by the prior belief from the previous step.</p>
+                            
+                            <p>Once again, the resulting probabilities are normalized to ensure they form a valid probability distribution. If all values become zero (due to errors or poor matches), normalization is skipped to avoid division by zero.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/8.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>  
+
+                            <h2>Result</h2>
+                            <p>After implementing the above functions, I obtained the following trajectory plot:</p>
+
+                            <ul>
+                            <li><span style="color:red;"><strong>Red line</strong></span>: Odometry values</li>
+                            <li><span style="color:green;"><strong>Green line</strong></span>: Ground truth positions</li>
+                            <li><span style="color:blue;"><strong>Blue line</strong></span>: Bayes Filter localization results</li>
+                            </ul>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab10/9.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>  
+                            <p>The following video demonstrates the entire process of localization using my implementation:</p>
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/YlOKssUn8kw"
+                                        title="Funny Drift Bot"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+                            <p>The following are the output results:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4">
+                                  <!-- 第一张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/10.png" alt="Image 1" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第二张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/11.png" alt="Image 2" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第三张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/12.png" alt="Image 3" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第四张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/13.png" alt="Image 4" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第五张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/14.png" alt="Image 5" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第六张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/15.png" alt="Image 6" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第七张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/16.png" alt="Image 7" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                  <!-- 第八张图 -->
+                                  <div class="col-md-6">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                      <img src="assets/img/lab10/17.png" alt="Image 8" class="img-fluid rounded" style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <p>From the output results, the localization system consistently maintained high accuracy. At almost every time step, both the predicted and updated <code>Bel index</code> remained very close to the <code>Ground Truth (GT index)</code>.</p>
+
+
+
+
+                          
+                            <h2>Conclusion</h2>
+                            <p>This experiment successfully implemented a grid-based localization system using the Bayes Filter. The system is able to accurately estimate the robot's position by continuously reducing uncertainty through the fusion of odometry and laser observations during both translational and rotational movements.</p>
+
+                          
+ 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
         
 
         <!-- 使用Bootstrap 5.x为例 -->
