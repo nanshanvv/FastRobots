@@ -206,11 +206,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab1Modal">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab11Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic11.png" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">Lab 11</div>
+                                <div class="project-name">Localization on the real robot</div>
                             </div>
                         </a>
                     </div>
@@ -4552,6 +4552,403 @@ return;
             </div>
         </div>
         
+        <!-- Begin Lab 11 HTML Report Embed -->
+        <div class="modal fade" id="lab11Modal" tabindex="-1" aria-labelledby="lab11ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 11 Localization on the real robot</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+        
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="container-fluid">
+                            <h2 class="text-center mb-4">Lab 11: Localization on the real robot</h2>
+    
+                            <h2>Objective</h2>
+                            <p>The objective of this task was to perform a full 360-degree mapping scan using a mobile robot equipped with BLE communication and ToF sensors, and to process the raw measurements into usable distance and angle data for further localization or mapping.</p>
+                            <hr class="my-4"/>
+                            
+                            <h2>Key Concepts</h2>
+                            <ul>
+                                <li>Used BLE to wirelessly control and collect sensor data from the robot</li>
+                                <li>Each mapping scan produced 18 sets of 5 ToF distance readings (per angle)</li>
+                                <li>Reference angles were normalized to the (-180°, 180°] range</li>
+                                <li>ToF data was filtered to remove invalid values (e.g., zero) and the median was computed</li>
+                                <li>Final outputs include both <strong>sensor_ranges</strong> (in meters) and <strong>sensor_bearings</strong> (in radians)</li>
+                                <li>At each position, the predicted pose was computed using the Bayes Filter's belief grid output</li>
+                                <li>The estimated pose was then compared to the manually recorded ground truth position</li>
+                            </ul>
+                            <hr class="my-4"/>
+                            
+                            <h2>Task 1: Test Localization in Simulation</h2>
+                            <p>I obtained the localization results by running <strong>lab11_sim.ipynb</strong>. The results are as follows:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>From the results, we can see that the odometry is not perfect, but the <strong>belief obtained with the Bayes filter</strong> (blue) is very close to the <strong>ground truth</strong> (green).</p>
+
+                            <hr class="my-4"/>
+                            <h2>Task 2: Localization with the Bayes Filter on Actual Robot</h2>
+                            <h3>Preparation</h3>
+                                <p> In Lab 11, I needed the robot to rotate 18 times at 20-degree increments. This functionality was already implemented in Lab 9 Mapping. I only had to change the <strong>step_angle</strong> to 20 to meet the experiment requirements. (See the Lab 9 report for details.)</p>
+                            <h3>Implementing perform_observation_loop</h3>
+                            <p>I believe that in robot experiments, we often need to perform multiple tasks simultaneously, such as receiving sensor data (e.g., ToF distance), controlling motor movement or steering, sending/receiving commands via BLE, and performing real-time computations (like PID control). </p>
+                             <p>   Therefore, <strong>coroutines</strong> are highly suitable for real-time control and multitasking coordination in this lab — they allow non-blocking waits, prevent the main flow from stalling, and enable smarter handling of interactions between sensors and control logic.</p>
+                            <p> Based on the Lab 11 tutorial (<a href="https://fastrobotscornell.github.io/FastRobots-2025/labs/Lab11.html" target="_blank">Lab 11: Localization</a>), I implemented <strong>perform_observation_loop</strong> using coroutines. The complete code is shown below:</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 第一张图 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab11/2.png" 
+                                                 alt="Observation Result 1" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                    </div>
+                            
+                                    <!-- 第二张图 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab11/3.png" 
+                                                 alt="Observation Result 2" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>The above is my final version of the complete code, which differs significantly from my initial implementation. At first, the results from my Bayes filter were extremely inaccurate. Through continuous debugging and modifying the code, I was able to achieve much better results.</p>
+
+                            <p>I will share my full debugging process below, in hopes that it will help others facing similar issues with Bayes filter prediction accuracy.</p>
+
+                            
+                            <h3>Debugging Process: Based on (5,-3)</h3>
+                            <p>Since my Lab 9 implementation worked very well, I initially thought Lab 11 would be easy for me. The success of the previous PID control experiments also gave me confidence that my sensors were functioning correctly.</p>
+
+                            <p>Below is a video of my first test at position <strong>(5, -3)</strong>:</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/8P4WOiYbaME"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>From the video, we can see that my robot's rotation performance was quite good (at least in my opinion). I also successfully collected ToF data from 18 different angles, with 5 measurements for each angle.</p>
+                            <p>In addition, I followed the angle convention where the positive x-axis is set as <strong>0 degrees</strong>, and the robot rotates <strong>counterclockwise up to 360 degrees</strong>. This is illustrated in the image below (originally shared by <strong>Aidan McNay</strong> on Ed Discussion — thanks to Aidan for the clear diagram):</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <!-- 去掉 max-height，改为 width: 100% -->
+                                            <img src="assets/img/lab11/4.png" 
+                                                 alt="Artemis and IMU" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                        <!-- 图注 -->
+                                        <p class="text-center mt-2" style="font-size: 0.9rem; color: #666;">Figure credit: Aidan McNay</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p>Originally, I believed that with this setup, the Bayes filter would allow me to accurately predict the robot's position and complete the experiment smoothly. However, the results were disappointing.</p>
+
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/5.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>As shown in the figure above, there was a significant gap between my prediction and the ground truth, so I began the debugging process.</p>
+                            
+                            
+                            <h4>Debug 1: Adjusting the Angle Range</h4>
+                            <p>First, TA <strong>Cameron</strong> informed me that the robot’s rotation angle range should be <strong>(-180, 180]</strong> instead of <strong>[0, 360)</strong>. I found this reasonable, because in the IMU lab, I recalled that the angle would suddenly jump from 180° to -179° during rotation. So, I modified my code accordingly, as shown in the figure below:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/6.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>However, even after adjusting the angle range, the prediction was still inaccurate, indicating that the problem lay elsewhere.</p>
+
+                            <h4>Debug 2: Was the ToF Sensor Affected by Interference?</h4>
+                            <p>I suspected that my ToF sensor might have been affected by interference because in his report, <strong>Steven Sun</strong> mentioned: “Also, the sensors might have periodically, sensed the ground instead of the world walls, making it think it’s in a more constrained position than it actually is.” (<a href="https://sts200.github.io/posts/Lab11/" target="_blank">Source Link</a>).</p>
+
+                            <p>This idea was reinforced by some of my own ToF readings, such as: <strong>Ref Angle: -120.0, ToF: 10.0, 788.0, 788.0, 789.0, 0.0</strong>, which clearly suggested abnormal or unstable measurements.</p>
+                            
+                            <p>To address this, I increased the time interval between each angle’s ToF readings (I set it to <strong>2</strong> seconds), and added a <strong>0.2-second delay</strong> before recording each ToF value. This made the data collection process more stable and reliable.</p>
+                            
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/7.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+
+                            <p>Additionally, TA <strong>Cameron</strong> noticed that the positioning sticker at point <strong>(0, 0)</strong> was slightly raised. To ensure more accurate localization, he reattached the sticker properly.</p>
+
+
+                            <p>After the adjustments above, my current ToF readings are shown in the figure below:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/8.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>As we can see, the data is quite stable. However, the localization results were still not very accurate. This suggests that while I resolved the sensor interference issue, the main problem likely lies elsewhere.</p>
+
+                            <h4>Debug 3: Modifying Sensor Data Calculation and Adding Angle Offset</h4>
+                            <p>After all the previous debugging steps, the prediction was still inaccurate. I began to suspect that there might be an issue with the orientation of the sensor data. To investigate further, I decided to plot <strong>polar plots</strong> to help identify the problem.</p>
+                            <p>The polar plots below show the sensor readings at position <strong>(5, -3)</strong>:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/9.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <p>It is clear that the contour at <strong>(5, -3)</strong> is generally correct, but the entire plot is rotated <strong>clockwise by about 30 degrees</strong>. Therefore, I added this angle offset in my code to correct the orientation.</p>
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 第一张图 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab11/10.png" 
+                                                 alt="Observation Result 1" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                    </div>
+                            
+                                    <!-- 第二张图 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                            <img src="assets/img/lab11/11.png" 
+                                                 alt="Observation Result 2" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>Additionally, I noticed that the ToF sensor readings occasionally included <strong>0 values</strong>, which are clearly invalid. To address this, I added a constraint in the <strong>data_received_handler</strong> function to ensure that the <strong>ToF array only stores values greater than 0</strong>.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/12.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+
+                            <p>More importantly, TA <strong>Cameron</strong> pointed out that in my code, I was calculating the final ToF distance using the <strong>average</strong> of the 5 readings. This was highly unreliable, as even a single inaccurate reading could significantly distort the result.</p>
+
+                            <p>Therefore, in my latest version of the code, I switched to using the <strong>median</strong> value instead, which is much more robust against outliers and noise in the sensor data.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/13.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <p>Additionally, to ensure that both the final ToF sensor data and the corresponding angle data were correctly passed into the Bayes Filter pipeline, I added a <strong>print</strong> statement inside the <strong>get_observation_data</strong> function in <strong>localization.py</strong>. This allowed me to confirm that the data was indeed being transmitted into the filtering process.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/14.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab11/15.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>It was clear from the print output that the data was indeed passed in correctly. Also, since I had previously set a <strong>30-degree offset</strong>, the first angle value appeared as <strong>0.523</strong> (in radians).</p>
+                            <p>After all the debugging efforts above, my final prediction results improved significantly compared to the initial attempts.</p>
+                            
+                            <hr class="my-4"/>
+                            <h2>Result</h2>
+                            <p>After the debugging steps above, the final result is shown in the figure below:</p>
+
+                            <div class="container my-4">
+                                <div class="row g-4 justify-content-center">
+                            
+                                    <!-- 图1 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white">
+                                            <img src="assets/img/lab11/16.png" 
+                                                 alt="Result 1" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                            <p class="text-center mt-2" style="font-weight: bold;">Result at Position (-3, -2)</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- 图2 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white">
+                                            <img src="assets/img/lab11/17.png" 
+                                                 alt="Result 2" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                            <p class="text-center mt-2" style="font-weight: bold;">Result at Position (5, -3)</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- 图3 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white">
+                                            <img src="assets/img/lab11/18.png" 
+                                                 alt="Result 3" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                            <p class="text-center mt-2" style="font-weight: bold;">Result at Position (0, 3)</p>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- 图4 -->
+                                    <div class="col-md-8">
+                                        <div class="p-3 border rounded shadow-sm bg-white">
+                                            <img src="assets/img/lab11/19.png" 
+                                                 alt="Result 4" 
+                                                 class="img-fluid rounded" 
+                                                 style="width: 100%; height: auto; object-fit: contain;">
+                                            <p class="text-center mt-2" style="font-weight: bold;">Result at Position (5, 3)</p>
+                                        </div>
+                                    </div>
+                            
+                                </div>
+                            </div>
+                            
+
+                        <p>As we can see, the predicted position is much closer to the ground truth, indicating that the stability and accuracy of the ToF data, as well as the robot’s rotation angle, have a significant impact on prediction performance.</p>
+
+                        <p>In particular, the result at position <strong>(-3, -2)</strong> shows high accuracy. This is likely because the position is located within a semi-enclosed space, where most ToF measurements are short-range and stable, making localization easier. In contrast, more open positions require the ToF sensor to detect distant walls, which increases the likelihood of inaccurate readings and therefore reduces prediction accuracy.</p>
+
+                        <p>The following video was recorded during my testing process:</p>
+                        <div class="mx-auto" style="max-width: 600px;">
+                            <div class="ratio ratio-16x9 mb-3">
+                                <iframe
+                                    src="https://www.youtube.com/embed/XRvp4VKW1bs"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+
+                        <hr class="my-4"/>
+                        <h2>Acknowledgments</h2>
+                        <p>Special thanks to TA <strong>Cameron</strong> for his guidance and support throughout my debugging process.</p>
+                        
+                        <p>Thanks to <strong>Aidan McNay</strong> for the helpful image he shared on Ed, which clarified the robot's forward direction and rotation reference.</p>
+                        
+                        <p>Appreciation also goes to <strong>Steven Sun</strong>, whose report made me consider the possibility that the sensor might sometimes detect the ground instead of the walls.</p>
+                                             
+    
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         
 
