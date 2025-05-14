@@ -215,11 +215,11 @@
                         </a>
                     </div>
                     <div class="col-lg-4 col-sm-6">
-                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab1Modal">
-                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/1.jpg" alt="..." />
+                        <a class="portfolio-box" data-bs-toggle="modal" data-bs-target="#lab12Modal">
+                            <img class="img-fluid" src="assets/img/portfolio/thumbnails/pic12.png" alt="..." />
                             <div class="portfolio-box-caption">
-                                <div class="project-category text-white-50">Category</div>
-                                <div class="project-name">Project Name</div>
+                                <div class="project-category text-white-50">Lab 12</div>
+                                <div class="project-name">Path Planning and Execution</div>
                             </div>
                         </a>
                     </div>
@@ -4950,6 +4950,400 @@ return;
             </div>
         </div>
 
+         <!-- Begin Lab 12 HTML Report Embed -->
+        <div class="modal fade" id="lab12Modal" tabindex="-1" aria-labelledby="lab12ModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold" id="lab7ModalLabel">Lab 12 Localization on the real robot</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+        
+                    <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
+                        <div class="container-fluid">
+                            <h2 class="text-center mb-4">Lab 12: Path Planning and Execution</h2>
+    
+                            <h2>Objective</h2>
+                            <p>
+                            The objective of this task was to enable a mobile robot to autonomously navigate through a predefined sequence of waypoints using BLE communication, PID control, and ToF sensors. The robot was expected to traverse the environment as quickly and accurately as possible, demonstrating reliable path following, precise rotation, and consistent distance estimation for real-time navigation.
+                            </p>
+                            <hr class="my-4"/>
+                            <h2>Approach Selection</h2>
+                            <p>
+                            To achieve accurate and efficient waypoint navigation, I adopted a modular control strategy combining relative rotation and distance-based PID control. The robot executes each leg of the path by first rotating to the target heading using tuned PID parameters for angular control, then moving forward until the desired distance is reached based on ToF sensor readings.
+                            </p>
+                            <p>
+                                The reason for selecting this approach is that the results from my Lab 11 were not very accurate, while the results from Lab 5, Lab 6, and Lab 9 were significantly better. This indicates that for tasks involving the ToF sensor and PID control, my robot performs exceptionally well. Therefore, I decided to use PID control to complete the final waypoint navigation lab.
+                            </p>
+                            <hr class="my-4"/>
+                                                        
+                            <h2>Path Planning</h2>
+                            <p>
+                                My final path planning is shown in the figure below.
+                            </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>
+                            At the beginning, my path planning was as shown in the figure below.
+                            </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/2.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>
+                                However, during the experiment, the ToF sensor was not able to reliably detect distant walls. As a result, my final path was adjusted to ensure that the robot would face closer walls whenever possible to better determine its position. This will be discussed in more detail in the following sections.
+                            </p>
+
+                            <hr class="my-4"/>
+                            <h2>Position Control and Direction Control</h2>
+                            <p>
+                                For position control, I used the PID control function implemented in Lab 5: Linear PID Control and Linear Interpolation to control the robot's movement. The following is the relevant <strong>pid_control</strong> code.
+                            </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/3.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>    
+                            <p>
+                                For direction control, I chose to use the code implemented in Lab 9: Mapping, because the robot's rotation was very accurate in that lab. Lab 9 demonstrated the reliability of this code.
+                            </p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab6/yaw.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab6/PID_IMU.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <hr class="my-4"/>
+                            <h2>State Machine Implementation</h2>
+                            <p>Based on the path planning diagram (as shown below), I implemented the state machine transition logic on the Python side.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <p>As shown in the diagram above, I need eight state machines to complete the entire path navigation. I use a list to store these eight state machines.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/4.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <p>Then, by implementing the <strong>drive_path</strong> function, I enabled the robot to follow the process: enter state machine → localization → rotation → pause → move to the next state machine.</p>
+                            <p>With this setup, the robot can complete the entire path by running the code just once, without needing to send commands repeatedly during execution.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/5.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <p>On top of the PID control code I implemented in Lab6 and Lab9, I added a <strong>stop</strong> command.</p>
+                            <p>This command is mainly used to stabilize the robot and clear the integral and error values accumulated during rotation and localization.</p>
+                            <p>It ensures the independence of each state machine and prevents residual data from the previous state machine from interfering with the current one.</p>
+
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/6.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <hr class="my-4"/>
+                            <h2>Experimental Procedure</h2>
+                            <h3>Verification: Accuracy of Localization and Rotation Functions</h3>
+                            <p>Before starting the experiment, I needed to determine the PID values for both movement and rotation of the robot.</p>
+                            <p>Additionally, I had to check whether executing the sequence of move → rotate → pause would cause any unexpected behavior.</p>
+                            <p>My idea was that if the robot operated normally after sequentially executing move and rotate commands, then it would confirm that the robot had a functioning basic localization and control system.</p>
+                            <p>The following two videos demonstrate the robot performing two tasks: rotating 90 degrees and stopping at a distance of 200 mm from the wall.</p>
+                            <p>As shown, the robot performed both tasks exceptionally well.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/Fh1UoYVJCkc"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/Hdhp4ORQz4Q"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>The PID values I selected for the robot's movement and rotation are as follows:</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/7.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/Hdhp4ORQz4Q"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+
+                            <h3>Issue Resolved 1: Inaccurate Long-Distance Detection by ToF Sensor</h3>
+                            <p>Initially, I designed the path with the robot's sensor facing the forward direction, allowing it to complete the entire route moving forward.</p>
+                            <p>As a result, I encountered the outcome shown in the following video.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/wn-tl7oe_CI"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+                            <p>From the video, it can be seen that after moving forward for a short distance, the robot suddenly accelerated and failed to stop, indicating that it was unable to detect the wall at a certain point.</p>
+                            <p>After multiple tests, I found that the robot's sensor was inaccurate when detecting walls more than 2500 mm away.</p>
+                            <p>Haixi Zhang suggested that I could try having the robot move backward for the entire path. This way, the sensor would always face the closer wall, which would improve detection accuracy.</p>
+                            <p>After modifying the plan, the robot's performance is shown in the following video.</p>
+
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/g5Ysef_MO0o"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+
+                            <p>From the video, it is clear that the robot's localization has improved significantly, and it can now stop correctly at the specified distance from the wall.</p>
+                            <p>However, I noticed a new issue: sometimes the robot mistakenly believes it has already hit the wall or reached the target position, causing it to stop moving prematurely.</p>
+                            <p>For example, in the video, the robot is supposed to move forward from position (2, -3) and stop around 150 mm from the wall, reaching (5, -3). But instead, it stops at (2, -3), indicating that the sensor has already reported a distance of about 150 mm at that point.</p>
+                            <p>This led me to realize that I had overlooked a problem when initially deciding on the sensor placement. In some cases, the sensor readings suddenly drop, which I will explain in detail in <strong>Issue Resolved 2</strong>.</p>
+
+                            <h3>Issue Resolved 2: Sudden Drop in ToF Sensor Readings (Suggestions on Initial Sensor Placement for Future Fast Robots Students)</h3>
+                            <p>In the previous section, I explained that the robot's sensor occasionally reports a sudden drop in distance readings. This issue is caused by some flaws in the placement of the sensor.</p>
+                            <p>First, it's important to understand that the sensor, like the human eye, can detect not only to the left, right, and straight ahead, but also upward and downward.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/8.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>With this understanding, let's take a look at the position of the sensor on my robot, as shown in the image below.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/9.jpg" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>As shown, my sensor is positioned in an area surrounded by the wheels and the front part of the robot. The most significant interference comes from the protruding section of the robot’s front, located directly beneath the sensor.</p>
+                            <p>Sometimes, the sensor scans this part of the chassis, which causes the reported distance to suddenly drop. I had previously assumed this was caused by ToF sensor noise, but I only realized the true cause today.</p>
+                            <p>This also explains why sudden zero values appeared in my ToF sensor readings during Lab 11.</p>
+                            <p>To solve this issue, I adjusted the placement of the ToF sensor, as shown in the image below.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/10.jpg" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>I used tissue paper to extend the ToF sensor outward until it aligned with the front edge of the robot. This adjustment helps minimize errors in the ToF sensor readings and prevents sudden drops to very small values.</p>
+
+                            <h3>Issue Resolved 3: Impact of Rotation Error on Robot Movement Direction</h3>
+                            <p>During the experiment, I found that even when using DMP and after repeatedly tuning the PID values, the robot still couldn't rotate to the exact target angle 100% of the time.</p>
+                            <p>For example, when the robot was supposed to rotate 90 degrees, it would sometimes rotate to around 95 degrees instead.</p>
+                            <p>This slight error could cause the robot to deviate from its path, potentially resulting in a collision with the wall or the ToF sensor detecting the wrong wall.</p>
+                            <p>The following video demonstrates this issue.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/zaxej8KqxtM"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>As shown, my robot successfully completed 80% of the path navigation. However, during the transition from (5, -3) to (5, 3), a slight rotation error caused the sensor to detect the wrong wall.</p>
+                            <p>To address this issue, I measured the robot's rotation error multiple times and compensated for it when sending rotation commands.</p>
+                            <p>For example, if I want the robot to rotate 90 degrees and I know the typical error is around 3–5 degrees, I set the target angle to 86 degrees instead.</p>
+                            
+                            <h2>Experimental Results</h2>
+                            <p>Since most of my later experiments were conducted on the third floor, where the lighting is relatively dim, I made slight adjustments to my path design.</p>
+                            <p>Instead of having the robot immediately rotate 45 degrees and move along the diagonal of a triangle to the target point, I changed the plan to have it rotate 90 degrees, localize, and then rotate another 90 degrees to reach the destination by following the triangle's right-angle sides.</p>
+                            <p>The following is my final path planning diagram.</p>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/1.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <p>The following video shows the process of my robot completing the entire path.</p>
+                            <div class="mx-auto" style="max-width: 600px;">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe
+                                        src="https://www.youtube.com/embed/2Y-oYdYoGMI"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            <p>From the video, it can be seen that only the point (1, -1) was slightly off due to a minor rotation error, while all other points were reached correctly.</p>
+                            <p>This issue is difficult to fully resolve, as the only solution is to continuously fine-tune the PID values to minimize the error. Factors such as wheel friction, motor input power, and the current state of the battery all influence the result.</p>
+                            <p>Overall, the robot successfully achieved path navigation through state machine transitions.</p>
+                            
+                            <h2>Conclusion</h2>
+                            <p>Fast Robots was undoubtedly the course I dedicated the most time and effort to this semester. I spent almost every weekend in the lab during office hours. When I saw my robot successfully complete the full path navigation, I felt that all the effort was truly worthwhile.</p>
+                            <p>I am deeply grateful to Professor Farrell and all the TAs—without your support, I couldn’t have completed all the labs successfully. I also want to thank all the classmates who helped me throughout the lab sessions—you showed me the true power of collaboration.</p>
+                            <p>I feel very fortunate to have taken this course. With the experience I've gained from Fast Robots, I believe I’ll be much more confident when facing future challenges in embedded systems.</p>
+                            <p><strong>Keep building. Keep debugging. Keep pushing. Every breakthrough starts with persistence!!!</strong></p>
+
+
+                                                
+    
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
 
         <!-- 使用Bootstrap 5.x为例 -->
