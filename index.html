@@ -5323,6 +5323,21 @@ return;
                                     </iframe>
                                 </div>
                             </div>
+                            <div class="container my-4">
+                                <!-- 图片区容器 -->
+                                <div class="row g-4 justify-content-center">
+                                    <!-- 让列占满全宽 -->
+                                    <div class="col-md-8">
+                                    <div class="p-3 border rounded shadow-sm bg-white h-100 d-flex align-items-center justify-content-center">
+                                        <!-- 去掉 max-height，改为 width: 100% -->
+                                        <img src="assets/img/lab12/11.png" 
+                                            alt="Artemis and IMU" 
+                                            class="img-fluid rounded" 
+                                            style="width: 100%; height: auto; object-fit: contain;">
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
                             <p>From the video, it can be seen that only the point (1, -1) was slightly off due to a minor rotation error, while all other points were reached correctly.</p>
                             <p>This issue is difficult to fully resolve, as the only solution is to continuously fine-tune the PID values to minimize the error. Factors such as wheel friction, motor input power, and the current state of the battery all influence the result.</p>
                             <p>Overall, the robot successfully achieved path navigation through state machine transitions.</p>
